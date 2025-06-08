@@ -29,6 +29,9 @@ jobs:
 
   Deploy-Backend-Render:
     runs-on: ubuntu-latest
+    env: # <-- Make them available globally
+      NODE_ENV: production
+      GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
     steps:
       - name: Trigger Render Deploy Hook
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
