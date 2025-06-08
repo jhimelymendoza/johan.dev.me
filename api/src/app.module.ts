@@ -2,20 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import OpenAI from "openai";
 import {GoogleGenAI} from "@google/genai";
 
 @Module({
   imports: [ConfigModule.forRoot()],
   controllers: [AppController],
-  providers: [AppService,  {
-    provide: OpenAI,
-    useFactory: (configService: ConfigService) => {
-      const apiKey = configService.get<string>('OPENAI_API_KEY');
-      return new OpenAI({ apiKey });
-    },
-    inject: [ConfigService],
-  },
+  providers: [AppService,
     {
       provide: GoogleGenAI,
       useFactory: (configService: ConfigService) => {
