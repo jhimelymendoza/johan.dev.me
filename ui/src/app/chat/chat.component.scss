@@ -1,0 +1,200 @@
+@use "../../theme/var.style" as *;
+@use "../../theme/mixin.responsive" as *;
+.main-layout{
+  //height: 100vh;
+  color: $textColor;
+
+
+  &__bg{
+    height: inherit;
+
+  }
+  &__header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    @include mobile{
+      justify-content: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      color: white;
+      padding: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      line-height: 70px;
+      letter-spacing: 0;
+      text-align: center;
+      cursor: pointer;
+
+      svg{
+        width: 18px !important;
+        height: 30px !important;
+      }
+    }
+
+
+
+    .dot {
+      color: $primaryColor;
+    }
+  }
+  &__content{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include mobile {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    @include xl{
+      //padding-top: 250px;
+    }
+
+    .blur-circle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 77px;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      /* fondo semitransparente */
+      background: rgba(255, 255, 255, 0.2) linear-gradient(
+          357.72deg,
+          rgba(114, 67, 255, 0.2) 37.36%,
+          #7243FF 77.11%,
+          #7243FF 87.44%,
+          #9A78FF 95.89%
+      );
+      filter: blur(64px); /* difuminado suave */
+      opacity: 0.9;
+      z-index: 0;
+
+      backdrop-filter: blur(10px);      /* difumina lo que está detrás */
+      -webkit-backdrop-filter: blur(10px); /* para compatibilidad en Safari */
+
+      @include xl {
+        //width: 1200px;
+        //height: 1200px;
+
+      }
+      @include mobile {
+        width: 400px;
+      }
+    }
+
+    &__chat{
+      z-index: 1;
+      margin-bottom: 3rem;
+    h3{
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 40px;
+      margin-top: 11px;
+    }p{
+          margin-top: 0;
+       font-size: 1.2rem;
+     }
+
+&__history{
+  min-height: 300px;
+  margin-bottom: 1rem;
+
+}
+      &__me{
+        height: fit-content;
+        min-height: 45px;
+        padding: 10px;
+        border: 2px solid #FFF;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap :10px;
+        margin-bottom: 20px;
+
+        img{
+          flex:2 2 auto;
+          cursor: pointer;
+
+        }
+        textarea{
+          flex: 24 24 auto;
+          height: inherit;
+          background: no-repeat;
+          border: none;
+          font-size: 1rem;
+          color: white;
+          width: 700px ;
+          resize: none;
+          overflow-y: auto;
+          max-height: calc(1.5em * 8);
+          line-height: 1.5em;
+          box-sizing: border-box;
+          @include tablet{
+            font-size: 2rem;
+          }
+          @include mobile {
+            font-size: 1rem;
+          }
+          &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: transparent;
+          }
+          &::placeholder {
+            color: white;
+            opacity: 1;
+          }
+        }
+        textarea::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+          background-color: white;       /* color del scroll */
+          border-radius: 4px;
+        }
+      }
+
+    }
+  }
+
+}
+
+.scrolling-container {
+  border-radius: 8px;
+  height: 250px;
+  width: 100%;               // o un ancho fijo como 500px
+  overflow: hidden;          // oculta el exceso de imagen
+  position: relative;
+}
+
+.scrolling-image {
+  display: block;
+  position: absolute;
+  white-space: nowrap;
+  animation: scroll-left 20s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    left: 100%;  // empieza completamente fuera del lado derecho
+  }
+  100% {
+    left: -100%; // termina completamente fuera del lado izquierdo
+  }
+}

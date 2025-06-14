@@ -1,4 +1,5 @@
 @use "../../theme/var.style" as *;
+@use "../../theme/mixin.responsive" as *;
 .main-layout{
   //height: 100vh;
   color: $textColor;
@@ -12,6 +13,9 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    @include mobile{
+      justify-content: center;
+    }
 
     .logo {
       font-size: 24px;
@@ -44,6 +48,14 @@
     align-items: center;
     justify-content: center;
     padding-top: 150px;
+    @include mobile {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    @include xl{
+      //padding-top: 250px;
+    }
+
     .blur-circle {
       position: absolute;
       top: 0;
@@ -63,6 +75,14 @@
       filter: blur(64px); /* difuminado suave */
       opacity: 0.9;
       z-index: 0;
+      @include xl {
+        //width: 1200px;
+        //height: 1200px;
+
+      }
+      @include mobile {
+        width: 400px;
+      }
     }
 
     &__ask{
@@ -71,7 +91,7 @@
         display: block;
         font-weight: 500;
         max-width: 600px;
-        font-size: 46px;
+        font-size: 3.286rem;
         line-height: 55px;
         letter-spacing: 0;
         text-align: center;
@@ -95,8 +115,14 @@
        height: inherit;
        background: no-repeat;
        border: none;
-       font-size: 32px;
+       font-size: 3rem;
        color: white;
+       @include tablet{
+         font-size: 2rem;
+       }
+       @include mobile {
+         font-size: 1rem;
+       }
        &:focus {
          outline: none;
          box-shadow: none;
@@ -109,11 +135,15 @@
         align-items: center;
         justify-content: space-around;
         margin-bottom: 30px;
+        gap:0.7rem;
+        @include mobile {
+        flex-direction: column;
+        }
         &__item{
           background: rgba(255, 255, 255, 0.1803921569);
-          width: 180px;
           border-radius: 15px;
           text-align: center;
+          min-width: 13rem;
           vertical-align: middle;
           padding: 10px 0;
           cursor: pointer;
@@ -127,7 +157,7 @@
         margin-bottom: 100px;
         &__item{
           background: $primaryColor;
-          width: 180px;
+          min-width: 13rem;
           border-radius: 15px;
           text-align: center;
           vertical-align: middle;

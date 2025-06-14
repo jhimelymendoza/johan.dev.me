@@ -1,1 +1,34 @@
-<p>chat works!</p>
+<div class="main-layout">
+  <div class="main-layout__bg">
+    <div class="main-layout__header">
+      <div class="logo" routerLink="/home">
+        <img src="assets/left.home.svg" alt="">
+        <span class="text">Johandev</span><span class="dot">.</span><span class="text">me</span>
+        <img src="assets/right.home.svg" alt="">
+      </div>
+    </div>
+    <div class="main-layout__content">
+      <div class="main-layout__content__chat">
+
+        <img src="assets/profile.svg" alt="profile">
+          <h3>Hola!</h3>
+        <p>En que te puedo ayudar?</p>
+        <div class="main-layout__content__chat__history"></div>
+        <div class="main-layout__content__chat__me"
+        >
+
+          <textarea  type="text"   #autoTextarea
+                     rows="1"
+                     placeholder="Escribe algo..."
+                     (input)="adjustHeight(autoTextarea)"></textarea>
+          <img src="assets/send.chat.svg" alt="">
+
+
+        </div>
+      </div>
+      <div class="blur-circle"></div>
+
+    </div>
+
+  </div>
+</div>
