@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {InternalServerErrorException, Module} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,6 +11,33 @@ import { AI_PROVIDER } from './ai/ai-provider.interface';
 import { GenAIService } from './ai/genai.service';
 import { AnthropicService } from './ai/anthropic.service';
 import { OllamaService } from './ai/ollama.service';
+
+function getOllamaInstance(configService: ConfigService<Record<string | symbol, unknown>, false>) {
+  const isCloud = configService.get<string>('OLLAMA_CLOUD') === 'true';
+  const host =
+      configService.get<string>('OLLAMA_HOST');
+  const apiKey = configService.get<string>('OLLAMA_API_KEY');
+
+  if (isCloud) {
+    if (!host) {
+      throw new InternalServerErrorException('OLLAMA_HOST should be setting')
+    }
+    return new Ollama({
+      host,
+      ...(isCloud && apiKey
+          ? {headers: {Authorization: `Bearer ${apiKey}`}}
+          : {}),
+    });
+  }
+
+  const localHost = configService.get<string>('OLLAMA_LOCAL_HOST')
+  if (!localHost) {
+    throw new InternalServerErrorException('OLLAMA_LOCAL_HOST should be setting')
+  }
+  return new Ollama({
+    host: localHost
+  });
+}
 
 @Module({
   imports: [
@@ -44,17 +71,8 @@ import { OllamaService } from './ai/ollama.service';
       provide: Ollama,
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const isCloud = configService.get<string>('OLLAMA_CLOUD') === 'true';
-        const host =
-          configService.get<string>('OLLAMA_HOST') ?? 'http://localhost:11434';
-        const apiKey = configService.get<string>('OLLAMA_API_KEY');
+        return getOllamaInstance(configService);
 
-        return new Ollama({
-          host,
-          ...(isCloud && apiKey
-            ? { headers: { Authorization: `Bearer ${apiKey}` } }
-            : {}),
-        });
       },
     },
     // AI provider implementations

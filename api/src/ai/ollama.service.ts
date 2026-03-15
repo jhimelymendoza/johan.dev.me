@@ -3,8 +3,10 @@ import { Ollama } from 'ollama';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage } from './ai-provider.interface';
 
-const CHAT_MODEL = 'qwen3.5:cloud';
-const EMBEDDING_MODEL = 'qwen3-embedding:latest';
+
+//const CHAT_MODEL = 'qwen3.5:cloud';
+const CHAT_MODEL = 'llama3.1:latest';
+const EMBEDDING_MODEL = 'qwen3-embedding:latest'
 
 @Injectable()
 export class OllamaService implements IAIProvider {
