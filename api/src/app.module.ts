@@ -6,6 +6,9 @@ import { GoogleGenAI } from '@google/genai';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './project/project.schema';
 import { Skills, SkillsSchema } from './project/skills.schema';
+import { AI_PROVIDER } from './ai/ai-provider.interface';
+import { GenAIService } from './ai/genai.service';
+import { AnthropicService } from './ai/anthropic.service';
 
 @Module({
   imports: [
@@ -25,13 +28,22 @@ import { Skills, SkillsSchema } from './project/skills.schema';
   controllers: [AppController],
   providers: [
     AppService,
+    // Google GenAI client
     {
       provide: GoogleGenAI,
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const apiKey = configService.get<string>('GENAI_API_KEY');
-        return new GoogleGenAI({ apiKey: apiKey });
+        return new GoogleGenAI({ apiKey });
       },
-      inject: [ConfigService],
+    },
+    // AI provider implementations
+    GenAIService,
+    AnthropicService,
+    // Active AI provider — switch between GenAIService and AnthropicService here
+    {
+      provide: AI_PROVIDER,
+      useExisting: GenAIService,
     },
   ],
 })

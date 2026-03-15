@@ -19,7 +19,7 @@ export class AppController {
 
   @Get('compare')
   compare(@Query('question') question: string){
-    return this.appService.compare(question);
+    return this.appService.hasAnyOfQuestionSkills(question);
   }
 
 }

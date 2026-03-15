@@ -28,6 +28,6 @@ Pregunta a analizar: "${prompt}"
 Respuesta:`
 }
 
-export function getIsSkillQuestionPrompt(prompt: string, skillsResult: { skill: string; similarity: number }[] | undefined) {
-    return `Esta fue la pregunta del user relaciondas a las habilidades de johan ${prompt} y este fue el resultado del analisis de habilidades relacionadas ${JSON.stringify(skillsResult)}. Con esta informacion responde la pregunta del user de la mejor manera posible`;
+export function getIsSkillQuestionPrompt(question: string, skillsResult: { skill: string; similarity: number }[] | undefined) {
+    return `Esta fue la pregunta del user relaciondas a las habilidades de johan ${question} y este fue el resultado del analisis de habilidades relacionadas ${JSON.stringify(skillsResult)}. Con esta informacion responde la pregunta del user de la mejor manera posible`;
 }
