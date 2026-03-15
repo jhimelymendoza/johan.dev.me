@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Ollama } from 'ollama';
+import OpenAI from 'openai';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
-
-//const CHAT_MODEL = 'qwen3.5:cloud';
-const CHAT_MODEL = 'llama3.1:latest';
-const EMBEDDING_MODEL = 'qwen3-embedding:latest'
+const CHAT_MODEL = 'gpt-4o-mini';
+const EMBEDDING_MODEL = 'text-embedding-3-small';
+const TEMPERATURE = 0.5;
 
 @Injectable()
-export class OllamaService implements IAIProvider {
-  constructor(private readonly client: Ollama) {}
-
+export class OpenAIService implements IAIProvider {
+  constructor(private readonly client: OpenAI) {}
 
   async chat(
     prompt: string,
     history: IChatMessage[],
     systemInstruction: string,
   ): Promise<string> {
-    const response = await this.client.chat({
+    const response = await this.client.chat.completions.create({
       model: CHAT_MODEL,
+      temperature: TEMPERATURE,
       messages: [
         { role: 'system', content: systemInstruction },
         ...history.map((msg) => ({
@@ -30,33 +29,33 @@ export class OllamaService implements IAIProvider {
       ],
     });
 
-    return response.message.content;
+    return response.choices[0].message.content ?? 'no tengo respuesta';
   }
 
   async generateEmbedding(text: string): Promise<number[]> {
-    const response = await this.client.embed({
+    const response = await this.client.embeddings.create({
       model: EMBEDDING_MODEL,
       input: text,
     });
 
-    return response.embeddings[0];
+    return response.data[0].embedding;
   }
 
   getModelInfo(): IModelInfo {
-    return { provider: 'Ollama', chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
+    return { provider: 'OpenAI', chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {
-    const response = await this.client.chat({
+    const response = await this.client.chat.completions.create({
       model: CHAT_MODEL,
-      options: { temperature: 0 },
+      temperature: 0,
       messages: [
         { role: 'system', content: getSkillComparisonIntentPrompt(prompt) },
         { role: 'user', content: prompt },
       ],
     });
 
-    const text = response.message.content.toLowerCase();
+    const text = (response.choices[0].message.content ?? '').toLowerCase();
     return /sí|si/.test(text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
   }
 }

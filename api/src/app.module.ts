@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GoogleGenAI } from '@google/genai';
 import { Ollama } from 'ollama';
+import OpenAI from 'openai';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './project/project.schema';
 import { Skills, SkillsSchema } from './project/skills.schema';
@@ -11,6 +12,7 @@ import { AI_PROVIDER } from './ai/ai-provider.interface';
 import { GenAIService } from './ai/genai.service';
 import { AnthropicService } from './ai/anthropic.service';
 import { OllamaService } from './ai/ollama.service';
+import { OpenAIService } from './ai/openai.service';
 
 function getOllamaInstance(configService: ConfigService<Record<string | symbol, unknown>, false>) {
   const isCloud = configService.get<string>('OLLAMA_CLOUD') === 'true';
@@ -75,14 +77,24 @@ function getOllamaInstance(configService: ConfigService<Record<string | symbol, 
 
       },
     },
+    // OpenAI client
+    {
+      provide: OpenAI,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const apiKey = configService.get<string>('OPENAI_API_KEY');
+        return new OpenAI({ apiKey });
+      },
+    },
     // AI provider implementations
     GenAIService,
     AnthropicService,
     OllamaService,
-    // Active AI provider — switch between GenAIService, AnthropicService or OllamaService here
+    OpenAIService,
+    // Active AI provider — switch between GenAIService, AnthropicService, OllamaService or OpenAIService here
     {
       provide: AI_PROVIDER,
-      useExisting: OllamaService,
+      useExisting: OpenAIService,
     },
   ],
 })

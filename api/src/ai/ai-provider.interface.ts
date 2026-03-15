@@ -5,6 +5,12 @@ export interface IChatMessage {
   content: string;
 }
 
+export interface IModelInfo {
+  provider: string;
+  chatModel: string;
+  embeddingModel: string;
+}
+
 export interface IAIProvider {
   /**
    * Send a chat message and return the model's response text.
@@ -31,4 +37,9 @@ export interface IAIProvider {
    * @returns true if the prompt is asking about skills/capabilities
    */
   isSkillComparison(prompt: string): Promise<boolean>;
+
+  /**
+   * Returns information about the active provider and models in use.
+   */
+  getModelInfo(): IModelInfo;
 }

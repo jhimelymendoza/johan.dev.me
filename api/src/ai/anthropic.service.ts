@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 // import Anthropic from '@anthropic-ai/sdk';
-import { IAIProvider, IChatMessage } from './ai-provider.interface';
+import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
 @Injectable()
 export class AnthropicService implements IAIProvider {
@@ -11,6 +11,10 @@ export class AnthropicService implements IAIProvider {
   //     apiKey: this.configService.get<string>('ANTHROPIC_API_KEY'),
   //   });
   // }
+
+  getModelInfo(): IModelInfo {
+    return { provider: 'Anthropic', chatModel: 'not implemented', embeddingModel: 'not implemented' };
+  }
 
   async chat(
     prompt: string,

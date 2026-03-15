@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
-import { IAIProvider, IChatMessage } from './ai-provider.interface';
+import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
 const MODEL = 'gemini-2.0-flash-001';
 const EMBEDDING_MODEL = 'gemini-embedding-001';
@@ -44,6 +44,10 @@ export class GenAIService implements IAIProvider {
     });
 
     return response.embeddings![0].values!;
+  }
+
+  getModelInfo(): IModelInfo {
+    return { provider: 'Google GenAI', chatModel: MODEL, embeddingModel: EMBEDDING_MODEL };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {

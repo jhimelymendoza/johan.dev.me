@@ -26,6 +26,9 @@ export class AppService {
     console.log(
       `MongoDB connection started: ${isConnected ? 'Connected' : 'Not Connected'}`,
     );
+
+    const { provider, chatModel, embeddingModel } = this.aiProvider.getModelInfo();
+    console.info(`AI Provider: ${provider} | Chat model: ${chatModel} | Embedding model: ${embeddingModel}`);
   }
 
   async ask(question: string): Promise<IChat> {
