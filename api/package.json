@@ -32,6 +32,7 @@
     "compute-cosine-similarity": "^1.1.0",
     "dotenv": "^16.5.0",
     "mongoose": "^8.15.1",
+    "ollama": "^0.6.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "uuid": "^11.1.0"
