@@ -1,0 +1,31 @@
+@mixin animated-noise($opacity: 0.18, $speed: 0.15s) {
+  &::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: $opacity;
+    pointer-events: none;
+    z-index: 2;
+    animation: grain $speed steps(1) infinite;
+  }
+
+  @keyframes grain {
+    0%   { transform: translate(0,    0);   }
+    10%  { transform: translate(-4%,  3%);  }
+    20%  { transform: translate(3%,  -5%);  }
+    30%  { transform: translate(-6%,  7%);  }
+    40%  { transform: translate(5%,   2%);  }
+    50%  { transform: translate(-3%, -4%);  }
+    60%  { transform: translate(7%,  -2%);  }
+    70%  { transform: translate(-5%,  5%);  }
+    80%  { transform: translate(2%,  -7%);  }
+    90%  { transform: translate(-7%,  3%);  }
+    100% { transform: translate(4%,   6%);  }
+  }
+}

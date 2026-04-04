@@ -42,7 +42,7 @@ export class ChatComponent implements AfterViewChecked, OnInit {
   }
 
   adjustHeight(textarea: HTMLTextAreaElement): void {
-    const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight || '20');
+    const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight || '15');
     const maxHeight = lineHeight * 8;
 
     textarea.style.height = 'auto';

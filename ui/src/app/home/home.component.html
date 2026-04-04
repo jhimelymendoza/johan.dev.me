@@ -46,7 +46,14 @@
         <img class="scrolling-image" src="assets/skills.home.svg" alt="skills">
       </div>
     </div>
-    <div class="blur-circle"></div>
+    <div class="blur-circle"
+         [style.left.%]="trackMouse() ? mouseX() : 50"
+         [style.top.%]="trackMouse() ? mouseY() : 50">
+    </div>
+
+    <button class="track-toggle" (click)="toggleTracking()" [title]="trackMouse() ? 'Desactivar efecto' : 'Activar efecto'">
+      <span class="track-toggle__dot" [class.active]="trackMouse()"></span>
+    </button>
 
   </div>
 

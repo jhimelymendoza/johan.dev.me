@@ -1,5 +1,6 @@
 @use "../../theme/var.style" as *;
 @use "../../theme/mixin.responsive" as *;
+@use "../../theme/mixin.noise" as *;
 .main-layout{
   //height: 100vh;
   color: $textColor;
@@ -7,7 +8,7 @@
 
   &__bg{
     height: inherit;
-
+    @include animated-noise;
   }
   &__header{
     width: 100%;
