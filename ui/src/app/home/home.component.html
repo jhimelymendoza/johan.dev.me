@@ -82,7 +82,18 @@
       <span class="track-toggle__dot" [class.active]="trackMouse()"></span>
     </button>
 
+    <button class="open-terminal" (click)="showTerminal.set(true)" title="Abrir terminal">
+      <span class="open-terminal__dot"></span>
+      Abrir terminal
+    </button>
+
   </div>
+
+  @if (showTerminal()) {
+    <div class="terminal-panel">
+      <jdm-terminal mode="panel" (closePanel)="showTerminal.set(false)" />
+    </div>
+  }
 
 </div>
 </div>

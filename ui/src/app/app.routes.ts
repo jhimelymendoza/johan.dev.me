@@ -14,5 +14,10 @@ export const routes: Routes = [
     path: 'timeline',
     loadComponent: () => import('./timeline/timeline.component').then((c) => c.TimelineComponent),
   },
+  {
+    path: 'terminal',
+    loadComponent: () => import('./terminal/terminal.component').then((c) => c.TerminalComponent),
+    data: { mode: 'fullscreen' },
+  },
   {path:'**',redirectTo:'/home'},
 ];
