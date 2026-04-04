@@ -1,10 +1,11 @@
-import {AfterViewChecked, Component, ElementRef, inject, ViewChild} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {AfterViewChecked, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {IChat, IHistory} from '../dto/chat.interface';
 import {NgClass} from '@angular/common';
 import {ChatService} from '../services/chat.service';
-import {finalize, tap} from 'rxjs';
+import {finalize, of} from 'rxjs';
+import {typewriter} from '../operators/typewriter.operator';
 
 @Component({
   selector: 'jdm-chat',
@@ -18,9 +19,10 @@ import {finalize, tap} from 'rxjs';
   styleUrl: './chat.component.scss',
   providers: [ChatService]
 })
-export class ChatComponent  implements AfterViewChecked {
+export class ChatComponent implements AfterViewChecked, OnInit {
 
   chatService=inject(ChatService)
+  private route=inject(ActivatedRoute)
   histories: IHistory[]=[
 
   ];
@@ -30,6 +32,14 @@ export class ChatComponent  implements AfterViewChecked {
 
   @ViewChild('chatHistory') chatHistory!: ElementRef<HTMLDivElement>;
 
+
+  ngOnInit(): void {
+    const q = this.route.snapshot.queryParamMap.get('q');
+    if (q) {
+      this.question = q;
+      this.send();
+    }
+  }
 
   adjustHeight(textarea: HTMLTextAreaElement): void {
     const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight || '20');
@@ -58,15 +68,23 @@ export class ChatComponent  implements AfterViewChecked {
       this.question='';
     })
 
-    this.chatService.ask(savedQuestion).pipe(tap(()=>{
-      this.loading=true;
-
-    }),finalize(()=>{
+    this.loading=true;
+    this.chatService.ask(savedQuestion).pipe(finalize(()=>{
       this.loading=false;
     })).subscribe((response:IChat)=>{
-    this.histories=[...this.histories,{ message:response.answer,bot:true,user:false}];
-   })
+      this.typewriterEffect(response.answer);
+    })
 
+  }
+
+  typewriterEffect(fullText: string): void {
+    const entry: IHistory = { message: '', bot: true, user: false, typing: true };
+    this.histories = [...this.histories, entry];
+
+    of(fullText).pipe(typewriter()).subscribe({
+      next: (partial) => entry.message = partial,
+      complete: () => entry.typing = false,
+    });
   }
 
   ngAfterViewChecked(): void {

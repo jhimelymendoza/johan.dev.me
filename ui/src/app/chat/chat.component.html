@@ -14,7 +14,7 @@
           <h3>Hola!</h3>
         <p>En que te puedo ayudar?</p>
         <div class="main-layout__content__chat__history" #chatHistory>
-          @for ( history of histories;track history.message; let last = $last){
+          @for ( history of histories;track $index){
             <div  class="chat-bubble"
                   [ngClass]="{
         'chat-bubble--user': history.user,
@@ -25,14 +25,20 @@
                 <img src="assets/ia.chat.svg" alt="ia.chat">
 
               }
-              <span [ngClass]="{ 'typing-text': last && history.bot }">
-      {{ history.message }}
-    </span>
+              <span>{{ history.message }}@if(history.typing){<span class="cursor">|</span>}</span>
 
 
 
             </div>
 
+          }
+          @if (loading) {
+            <div class="chat-bubble chat-bubble--bot">
+              <img src="assets/ia.chat.svg" alt="ia.chat">
+              <span class="typing-dots">
+                <span></span><span></span><span></span>
+              </span>
+            </div>
           }
         </div>
         <div class="main-layout__content__chat__me"

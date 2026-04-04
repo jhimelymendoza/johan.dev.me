@@ -20,6 +20,11 @@ export class HomeComponent {
   })
 
   ask() {
-    this.router.navigate(['chat']);
+    const q = this.form.get('chat')?.value?.trim();
+    if (q) {
+      this.router.navigate(['chat'], { queryParams: { q } });
+    } else {
+      this.router.navigate(['chat']);
+    }
   }
 }

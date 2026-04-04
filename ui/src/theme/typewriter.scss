@@ -1,0 +1,14 @@
+// Typewriter cursor — pair with the typewriter() RxJS operator.
+// Add <span class="cursor">|</span> next to your text while typing is active.
+
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: rgba(255, 255, 255, 0.8);
+  animation: blink-cursor 0.6s step-end infinite;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
