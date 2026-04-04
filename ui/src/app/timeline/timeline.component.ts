@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, PLATFORM_ID, QueryList, ViewChildren } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 interface TimelineEntry {
@@ -19,8 +20,14 @@ interface TimelineEntry {
 })
 export class TimelineComponent implements AfterViewInit {
 
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   @ViewChildren('entry') entries!: QueryList<ElementRef>;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    setTimeout(() => this.setupObserver());
+  }
 
   timelineData: TimelineEntry[] = [
     {
@@ -97,7 +104,15 @@ export class TimelineComponent implements AfterViewInit {
     },
   ];
 
-  ngAfterViewInit(): void {
+  onDotClick(event: MouseEvent): void {
+    const dot = (event.currentTarget as HTMLElement);
+    dot.classList.remove('burst');
+    void dot.offsetWidth; // fuerza reflow para reiniciar animación
+    dot.classList.add('burst');
+    dot.addEventListener('animationend', () => dot.classList.remove('burst'), { once: true });
+  }
+
+  private setupObserver(): void {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -107,7 +122,7 @@ export class TimelineComponent implements AfterViewInit {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
 
     this.entries.forEach((ref) => observer.observe(ref.nativeElement));

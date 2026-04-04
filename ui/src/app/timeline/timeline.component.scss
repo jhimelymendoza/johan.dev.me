@@ -40,42 +40,6 @@
   }
 }
 
-.timeline-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  height: calc(100vh - 90px);
-  overflow-y: auto;
-  padding: 40px 24px 100px;
-  box-sizing: border-box;
-
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-
-  .blur-circle {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 700px;
-    height: 700px;
-    border-radius: 50%;
-    background: linear-gradient(
-      357.72deg,
-      rgba(114, 67, 255, 0.2) 37.36%,
-      #7243FF 77.11%,
-      #7243FF 87.44%,
-      #9A78FF 95.89%
-    );
-    filter: blur(64px);
-    opacity: 0.5;
-    z-index: 0;
-    pointer-events: none;
-  }
-}
-
-// Timeline custom
 .tl {
   position: relative;
   z-index: 1;
@@ -152,6 +116,7 @@
       justify-content: center;
       margin-top: 10px;
       position: relative;
+      cursor: pointer;
 
       &__core {
         width: 12px;
@@ -161,6 +126,7 @@
         box-shadow: 0 0 8px rgba(114, 67, 255, 0.8);
         position: relative;
         z-index: 1;
+        transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
       }
 
       &__ring {
@@ -170,6 +136,28 @@
         border-radius: 50%;
         border: 1px solid rgba(114, 67, 255, 0.4);
         animation: pulse-ring 2.5s ease-out infinite;
+        transition: border-color 0.25s ease;
+      }
+
+      // Hover — rosado
+      &:hover {
+        .tl__entry__dot__core {
+          background: #FF4FAD;
+          box-shadow: 0 0 12px rgba(255, 79, 173, 0.9);
+          transform: scale(1.2);
+        }
+        .tl__entry__dot__ring {
+          border-color: rgba(255, 79, 173, 0.6);
+        }
+      }
+
+      // Click — burst
+      &.burst {
+        .tl__entry__dot__ring {
+          animation: pulse-ring-burst 0.6s ease-out forwards;
+          border-color: rgba(255, 79, 173, 0.9);
+          border-width: 2px;
+        }
       }
     }
 
@@ -202,4 +190,10 @@
   0%   { transform: scale(1);   opacity: 0.6; }
   80%  { transform: scale(2.2); opacity: 0;   }
   100% { transform: scale(2.2); opacity: 0;   }
+}
+
+@keyframes pulse-ring-burst {
+  0%   { transform: scale(1);   opacity: 1;   }
+  60%  { transform: scale(3.5); opacity: 0.4; }
+  100% { transform: scale(4.5); opacity: 0;   }
 }
