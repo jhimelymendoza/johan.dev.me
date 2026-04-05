@@ -1,5 +1,5 @@
 // ─── Palette (WebStorm / IntelliJ Dark) ─────────────────────────
-$bg:        #1e1f2b;
+$bg:        #1D1D1D;
 $bar-bg:    #13141f;
 $border:    rgba(255, 255, 255, 0.07);
 $text:      #abb2bf;
@@ -123,6 +123,7 @@ $tag:       #c678dd;   // purple-pink
   cursor: text;
   min-height: 240px;
   max-height: 380px;
+  text-align: left;
 
   .term--fullscreen & {
     max-height: none;
@@ -142,7 +143,8 @@ $tag:       #c678dd;   // purple-pink
   color: $text;
   white-space: pre-wrap;
   word-break: break-all;
-  min-height: 1.65em; // blank lines keep height
+  min-height: 1.65em;
+  text-align: left;
 }
 
 // ─── Input row ───────────────────────────────────────────────────
@@ -150,6 +152,7 @@ $tag:       #c678dd;   // purple-pink
   display: flex;
   align-items: center;
   padding: 2px 0 10px;
+  text-align: left;
 }
 
 .term__prompt {
@@ -176,7 +179,7 @@ $tag:       #c678dd;   // purple-pink
 }
 
 // ─── Inline text colour helpers ──────────────────────────────────
-:host {
+:host ::ng-deep {
   .c-brand  { color: $brand; }
   .c-prompt { color: $prompt; }
   .c-input  { color: $text; }

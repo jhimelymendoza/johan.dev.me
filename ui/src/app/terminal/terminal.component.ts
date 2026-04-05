@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 
 interface TermLine {
   html: SafeHtml;
+  highlight?: boolean;
 }
 
 @Component({
@@ -104,7 +105,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
     if (e.key === 'Enter') {
       const cmd = this.currentInput.trim();
       this.push(
-        `<span class="c-prompt">johandev@portfolio:~$</span>&nbsp;<span class="c-input">${this.esc(cmd)}</span>`
+        `<span class="c-prompt">johandev:~$</span>&nbsp;<span class="c-prompt">${this.esc(cmd)}</span>`
       );
       if (cmd) {
         this.cmdHistory.unshift(cmd);
@@ -157,8 +158,7 @@ export class TerminalComponent implements OnInit, AfterViewInit {
       fn();
     } else {
       this.push(
-        `<span class="c-error">bash: ${this.esc(cmd)}: comando no encontrado</span>&nbsp;` +
-        `<span class="c-dim">— escribe <span class="c-cmd">ayuda</span></span>`
+        `<span class="c-brand">bash:</span> <span class="c-dim">${this.esc(cmd)}: comando no encontrado — escribe <span class="c-cmd">ayuda</span></span>`
       );
     }
     this.push('');
@@ -227,12 +227,13 @@ export class TerminalComponent implements OnInit, AfterViewInit {
   }
 
   onYellow(): void {
-    this.router.navigate(['/terminal']);
-  }
-
-  onGreen(): void {
     if (this.mode === 'fullscreen') {
       this.router.navigate(['/home'], { queryParams: { panel: '1' } });
     }
+  }
+
+  onGreen(): void {
+    this.router.navigate(['/terminal']);
+
   }
 }
