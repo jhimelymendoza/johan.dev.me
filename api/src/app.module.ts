@@ -6,8 +6,8 @@ import { GoogleGenAI } from '@google/genai';
 import { Ollama } from 'ollama';
 import OpenAI from 'openai';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Project, ProjectSchema } from './project/project.schema';
 import { Skills, SkillsSchema } from './project/skills.schema';
+import { ProjectModule } from './project/project.module';
 import { AI_PROVIDER } from './ai/ai-provider.interface';
 import { GenAIService } from './ai/genai.service';
 import { AnthropicService } from './ai/anthropic.service';
@@ -52,9 +52,9 @@ function getOllamaInstance(configService: ConfigService<Record<string | symbol, 
       inject: [ConfigService],
     }),
     MongooseModule.forFeature([
-      { name: Project.name, schema: ProjectSchema },
       { name: Skills.name, schema: SkillsSchema },
     ]),
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [

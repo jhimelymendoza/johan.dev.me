@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { Project } from './project/project.schema';
 import { Skills } from './project/skills.schema';
+import { ProjectService } from './project/project.service';
 import cosineSimilarity from 'compute-cosine-similarity';
 import {
   getInstructions,
@@ -17,7 +17,7 @@ export class AppService {
   constructor(
     @Inject(AI_PROVIDER) private aiProvider: IAIProvider,
     @InjectConnection() private connection: Connection,
-    @InjectModel(Project.name) private projectModel: Model<Project>,
+    private projectService: ProjectService,
     @InjectModel(Skills.name) private skillsModel: Model<Skills>,
   ) {}
 
@@ -32,7 +32,7 @@ export class AppService {
   }
 
   async ask(question: string): Promise<IChat> {
-    const project = await this.projectModel.find().exec();
+    const project = await this.projectService.findAll();
 
     const isSkillQuery = await this.aiProvider.isSkillComparison(question);
     let skillsResult: { skill: string; similarity: number }[] | undefined;
