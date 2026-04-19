@@ -54,10 +54,10 @@
 
       </div>
       <div class="main-layout__content__ask__actions">
-        <div role="button" class="main-layout__content__ask__actions__item">
+        <div [routerLink]="'/coming-soon'" [queryParams]="{title:'Sobre Mí',subtitle:'Pronto podrás conocer más sobre mí'}" role="button" class="main-layout__content__ask__actions__item">
           Sobre mi
         </div>
-        <div role="button" class="main-layout__content__ask__actions__item">
+        <div [routerLink]="'/coming-soon'" [queryParams]="{title:'Mis Habilidades',subtitle:'Pronto verás todas mis habilidades'}" role="button" class="main-layout__content__ask__actions__item">
           Mis habilidades
         </div>
         <div [routerLink]="'/timeline'" role="button" class="main-layout__content__ask__actions__item">
@@ -65,8 +65,8 @@
         </div>
       </div>
       <div  class="main-layout__content__ask__contact">
-        <div role="button" class="main-layout__content__ask__contact__item">
-         Contáctame
+<div [routerLink]="'/coming-soon'" [queryParams]="{title:'Contáctame',subtitle:'Pronto podrás contactarme'}" role="button" class="main-layout__content__ask__contact__item">
+          Contáctame
         </div>
       </div>
       <div class="scrolling-container">

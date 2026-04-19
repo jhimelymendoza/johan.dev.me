@@ -19,5 +19,9 @@ export const routes: Routes = [
     loadComponent: () => import('./terminal/terminal.component').then((c) => c.TerminalComponent),
     data: { mode: 'fullscreen' },
   },
+  {
+    path: 'coming-soon',
+    loadComponent: () => import('./coming-soon/coming-soon.component').then((c) => c.ComingSoonComponent),
+  },
   {path:'**',redirectTo:'/home'},
 ];
