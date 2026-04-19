@@ -12,7 +12,7 @@
       <div class="tl__body">
         <div class="tl__line"></div>
 
-        @for (item of timelineData; track item.id; let i = $index;) {
+        @for (item of timelineData(); track item.id; let i = $index;) {
           <div class="tl__entry" #entry>
 
             <div class="tl__entry__left">
@@ -27,17 +27,20 @@
 
             <div class="tl__entry__right">
               <h3 class="tl__entry__right__role">{{ item.role }}</h3>
+              @if (item.description) {
+                <p><span class="label">Summary :</span>  <span>{{ item.description }}</span></p>
+              }
               @if (item.front) {
-                <p><span class="label">Stack-Front:</span> {{ item.front }}</p>
+                <p><span class="label">Stack-Front :</span> <span>{{ item.front }}</span></p>
               }
               @if (item.back) {
-                <p><span class="label">Stack-Backend:</span> {{ item.back }}</p>
+                <p><span class="label">Stack-Backend :</span> <span>{{ item.back }}</span> </p>
               }
               @if (item.devops) {
-                <p><span class="label">Stack-Devpos:</span> {{ item.devops }}</p>
+                <p><span class="label">Stack-Devpos :</span>  <span>{{ item.devops }}</span></p>
               }
               @if (item.methodology) {
-                <p><span class="label">Metodología:</span> {{ item.methodology }}</p>
+                <p><span class="label">Metodología :</span>  <span>{{ item.methodology }}</span></p>
               }
             </div>
 

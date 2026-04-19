@@ -65,7 +65,7 @@
     grid-template-columns: 1fr 20px 1fr;
     align-items: start;
     gap: 0 32px;
-    margin-bottom: 72px;
+    margin-bottom: 62px;
 
     // Estado inicial
     .tl__entry__left {
@@ -168,6 +168,7 @@
         font-size: 1rem;
         font-weight: 600;
         margin: 0 0 10px;
+        text-align: start;
       }
 
       p {
@@ -176,6 +177,12 @@
         color: rgba(255, 255, 255, 0.55);
         line-height: 1.5;
         text-align: left;
+        display: flex;
+        gap: 5px;
+        span:last-child {
+          width: 500px;
+          display: block;
+        }
       }
 
       .label {
