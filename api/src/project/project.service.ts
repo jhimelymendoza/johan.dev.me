@@ -31,6 +31,7 @@ export class ProjectService {
 
   private toDto(project: ProjectDocument): ProjectDto {
     return {
+      id: project._id.toString(),
       company: project.company,
       year: project.year,
       role: project.role,

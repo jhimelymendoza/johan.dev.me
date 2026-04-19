@@ -1,9 +1,9 @@
-export class ProjectDto {
+export interface TimelineEntry {
   id:string;
   company: string;
   year: string;
   role: string;
-  description: string;
+  description: string
   front?: string;
   back?: string;
   devops?: string;

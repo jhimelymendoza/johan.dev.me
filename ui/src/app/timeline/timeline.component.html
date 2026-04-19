@@ -12,7 +12,7 @@
       <div class="tl__body">
         <div class="tl__line"></div>
 
-        @for (item of timelineData; track item.company; let i = $index) {
+        @for (item of timelineData; track item.id; let i = $index;) {
           <div class="tl__entry" #entry>
 
             <div class="tl__entry__left">
