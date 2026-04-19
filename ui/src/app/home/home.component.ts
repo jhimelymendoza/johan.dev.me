@@ -2,6 +2,7 @@ import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {TerminalComponent} from '../terminal/terminal.component';
+import {AiConfigService} from '../services/ai-config.service';
 
 @Component({
   selector: 'jdm-home',
@@ -18,6 +19,7 @@ export class HomeComponent implements OnInit {
   router = inject(Router);
   private route = inject(ActivatedRoute);
   fb = inject(FormBuilder);
+  aiConfigService = inject(AiConfigService);
   form: FormGroup = this.fb.group({ chat: [''] });
 
   mouseX = signal(50);
@@ -25,9 +27,13 @@ export class HomeComponent implements OnInit {
   trackMouse = signal(true);
   showTerminal = signal(false);
 
+  aiConfig = this.aiConfigService.config;
+  aiLoading = this.aiConfigService.loading;
+
   ngOnInit(): void {
     const panel = this.route.snapshot.queryParamMap.get('panel');
     if (panel === '1') this.showTerminal.set(true);
+    this.aiConfigService.fetchConfig();
   }
 
   @HostListener('mousemove', ['$event'])

@@ -87,6 +87,14 @@
       Abrir terminal
     </button>
 
+    @if (!aiLoading()) {
+      <div class="ai-config-tags">
+        <span class="ai-config-tag provider">{{ aiConfig()?.provider }}</span>
+        <span class="ai-config-tag model">{{ aiConfig()?.chatModel }}</span>
+        <span class="ai-config-tag embedding">{{ aiConfig()?.embeddingModel }}</span>
+      </div>
+    }
+
   </div>
 
   @if (showTerminal()) {

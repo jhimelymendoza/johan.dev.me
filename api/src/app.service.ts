@@ -1,4 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { AiConfigDto } from './ai-config.dto';
+import { IChat } from './dto/chat.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { Skills } from './project/skills.schema';
@@ -29,6 +31,11 @@ export class AppService {
 
     const { provider, chatModel, embeddingModel } = this.aiProvider.getModelInfo();
     console.info(`AI Provider: ${provider} | Chat model: ${chatModel} | Embedding model: ${embeddingModel}`);
+  }
+
+  getAiConfig(): AiConfigDto {
+    const { provider, chatModel, embeddingModel } = this.aiProvider.getModelInfo();
+    return { provider, chatModel, embeddingModel };
   }
 
   async ask(question: string): Promise<IChat> {

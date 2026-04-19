@@ -1,4 +1,4 @@
-interface IChat {
+export interface IChat {
   answer: string;
   isSkillQuery?: boolean;
     skills?:

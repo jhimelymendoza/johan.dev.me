@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {IChat, IHistory} from '../dto/chat.interface';
 import {NgClass} from '@angular/common';
 import {ChatService} from '../services/chat.service';
+import {AiConfigService} from '../services/ai-config.service';
 import {finalize, of} from 'rxjs';
 import {typewriter} from '../operators/typewriter.operator';
 
@@ -22,6 +23,7 @@ import {typewriter} from '../operators/typewriter.operator';
 export class ChatComponent implements AfterViewChecked, OnInit {
 
   chatService=inject(ChatService)
+  aiConfigService=inject(AiConfigService)
   private route=inject(ActivatedRoute)
   histories: IHistory[]=[
 
@@ -30,10 +32,14 @@ export class ChatComponent implements AfterViewChecked, OnInit {
   question='';
   loading = false;
 
+  aiConfig = this.aiConfigService.config;
+  aiLoading = this.aiConfigService.loading;
+
   @ViewChild('chatHistory') chatHistory!: ElementRef<HTMLDivElement>;
 
 
   ngOnInit(): void {
+    this.aiConfigService.fetchConfig();
     const q = this.route.snapshot.queryParamMap.get('q');
     if (q) {
       this.question = q;

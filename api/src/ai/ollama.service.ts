@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Ollama } from 'ollama';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
 
 //const CHAT_MODEL = 'qwen3.5:cloud';
-const CHAT_MODEL = 'llama3.1:latest';
+const CHAT_MODEL = 'kimi-k2.5';
 const EMBEDDING_MODEL = 'qwen3-embedding:latest'
 
 @Injectable()
 export class OllamaService implements IAIProvider {
-  constructor(private readonly client: Ollama) {}
+  constructor(
+    private readonly client: Ollama,
+    private readonly configService: ConfigService,
+  ) {}
 
 
   async chat(
@@ -43,7 +47,9 @@ export class OllamaService implements IAIProvider {
   }
 
   getModelInfo(): IModelInfo {
-    return { provider: 'Ollama', chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
+    const isCloud = this.configService.get<string>('OLLAMA_CLOUD') === 'true';
+    const providerName = isCloud ? 'Ollama Cloud' : 'Ollama';
+    return { provider: providerName, chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {

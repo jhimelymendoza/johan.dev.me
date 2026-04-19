@@ -74,7 +74,6 @@ function getOllamaInstance(configService: ConfigService<Record<string | symbol, 
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return getOllamaInstance(configService);
-
       },
     },
     // OpenAI client
@@ -89,12 +88,16 @@ function getOllamaInstance(configService: ConfigService<Record<string | symbol, 
     // AI provider implementations
     GenAIService,
     AnthropicService,
-    OllamaService,
+    {
+      provide: OllamaService,
+      useFactory: (client: Ollama, configService: ConfigService) => new OllamaService(client, configService),
+      inject: [Ollama, ConfigService],
+    },
     OpenAIService,
     // Active AI provider — switch between GenAIService, AnthropicService, OllamaService or OpenAIService here
     {
       provide: AI_PROVIDER,
-      useExisting: OpenAIService,
+      useClass: OllamaService,
     },
   ],
 })

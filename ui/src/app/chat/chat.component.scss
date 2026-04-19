@@ -282,3 +282,37 @@
     left: -100%; // termina completamente fuera del lado izquierdo
   }
 }
+
+.ai-config-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.ai-config-tag {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+
+  &.provider {
+    background: rgba(255, 99, 71, 0.2);
+    border: 1px solid rgba(255, 99, 71, 0.4);
+    color: #ff6347;
+  }
+
+  &.model {
+    background: rgba(255, 105, 180, 0.2);
+    border: 1px solid rgba(255, 105, 180, 0.4);
+    color: #ff69b4;
+  }
+
+  &.embedding {
+    background: rgba(180, 100, 220, 0.2);
+    border: 1px solid rgba(180, 100, 220, 0.4);
+    color: #b464dc;
+  }
+}
