@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IEmbeddingModelInfo, IEmbeddingProvider } from './embedding-provider.interface';
+import {
+  IEmbeddingModelInfo,
+  IEmbeddingProvider,
+} from './embedding-provider.interface';
 
 /**
  * STUB — MongoDB Atlas does not expose a standalone embedding generation endpoint.

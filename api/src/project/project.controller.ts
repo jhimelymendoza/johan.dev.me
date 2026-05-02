@@ -9,8 +9,15 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all projects', description: 'Returns the full list of projects ordered by year.' })
-  @ApiResponse({ status: 200, description: 'List of projects', type: [ProjectDto] })
+  @ApiOperation({
+    summary: 'Get all projects',
+    description: 'Returns the full list of projects ordered by year.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of projects',
+    type: [ProjectDto],
+  })
   findAll(): Promise<ProjectDto[]> {
     return this.projectService.findAll();
   }

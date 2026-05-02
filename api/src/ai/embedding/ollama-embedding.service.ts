@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Ollama } from 'ollama';
-import { IEmbeddingModelInfo, IEmbeddingProvider } from './embedding-provider.interface';
+import {
+  IEmbeddingModelInfo,
+  IEmbeddingProvider,
+} from './embedding-provider.interface';
 
 const EMBEDDING_MODEL = 'qwen3-embedding:latest';
 

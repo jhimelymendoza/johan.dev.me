@@ -7,7 +7,8 @@ import { ProjectDto } from './project.dto';
 @Injectable()
 export class ProjectService {
   constructor(
-    @InjectModel(Project.name) private readonly projectModel: Model<ProjectDocument>,
+    @InjectModel(Project.name)
+    private readonly projectModel: Model<ProjectDocument>,
   ) {}
 
   async findAll(): Promise<ProjectDto[]> {
@@ -36,9 +37,9 @@ export class ProjectService {
       year: project.year,
       role: project.role,
       description: project.description,
-      ...(project.front       && { front: project.front }),
-      ...(project.back        && { back: project.back }),
-      ...(project.devops      && { devops: project.devops }),
+      ...(project.front && { front: project.front }),
+      ...(project.back && { back: project.back }),
+      ...(project.devops && { devops: project.devops }),
       ...(project.methodology && { methodology: project.methodology }),
     };
   }

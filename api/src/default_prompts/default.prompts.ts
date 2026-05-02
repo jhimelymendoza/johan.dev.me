@@ -19,15 +19,18 @@ Que puedes dar:
 `;
 }
 
-export function getSkillComparisonIntentPrompt(prompt:string){
-    return  `Eres un asistente especializado en analizar preguntas. Tu tarea es determinar si una pregunta está relacionada con las habilidades de alguien.  
+export function getSkillComparisonIntentPrompt(prompt: string) {
+  return `Eres un asistente especializado en analizar preguntas. Tu tarea es determinar si una pregunta está relacionada con las habilidades de alguien.  
 Analiza cuidadosamente el texto de la pregunta y responde únicamente con "sí" si la pregunta está indagando sobre las habilidades, conocimientos o capacidades de una persona, o con "no" si no lo está.  
 No agregues explicaciones ni comentarios adicionales.  
 
 Pregunta a analizar: "${prompt}"
-Respuesta:`
+Respuesta:`;
 }
 
-export function getIsSkillQuestionPrompt(question: string, skillsResult: { skill: string; similarity: number }[] | undefined) {
-    return `Esta fue la pregunta del user relaciondas a las habilidades de johan ${question} y este fue el resultado del analisis de habilidades relacionadas ${JSON.stringify(skillsResult)}. Con esta informacion responde la pregunta del user de la mejor manera posible`;
+export function getIsSkillQuestionPrompt(
+  question: string,
+  skillsResult: { skill: string; similarity: number }[] | undefined,
+) {
+  return `Esta fue la pregunta del user relaciondas a las habilidades de johan ${question} y este fue el resultado del analisis de habilidades relacionadas ${JSON.stringify(skillsResult)}. Con esta informacion responde la pregunta del user de la mejor manera posible`;
 }

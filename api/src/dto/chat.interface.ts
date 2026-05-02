@@ -1,7 +1,7 @@
 export interface IChat {
   answer: string;
   isSkillQuery?: boolean;
-    skills?:
+  skills?:
     | {
         skill: string;
         similarity: number;

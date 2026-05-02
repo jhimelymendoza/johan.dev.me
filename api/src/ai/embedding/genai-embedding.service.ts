@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
-import { IEmbeddingModelInfo, IEmbeddingProvider } from './embedding-provider.interface';
+import {
+  IEmbeddingModelInfo,
+  IEmbeddingProvider,
+} from './embedding-provider.interface';
 
 const EMBEDDING_MODEL = 'gemini-embedding-001';
 

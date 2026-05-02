@@ -57,8 +57,6 @@ export class AnthropicService implements IAIProvider {
     //   ? response.content[0].text.toLowerCase()
     //   : '';
     // return /sí|si/.test(text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-    throw new Error(
-      'AnthropicService.isSkillComparison — not implemented yet',
-    );
+    throw new Error('AnthropicService.isSkillComparison — not implemented yet');
   }
 }

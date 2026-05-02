@@ -7,9 +7,19 @@ import { Connection, ConnectionStates, Model } from 'mongoose';
 import { Skills } from './project/skills.schema';
 import { ProjectService } from './project/project.service';
 import cosineSimilarity from 'compute-cosine-similarity';
-import { getInstructions, getIsSkillQuestionPrompt, } from './default_prompts/default.prompts';
-import { AI_PROVIDER, IAIProvider, IChatMessage, } from './ai/ai-provider.interface';
-import { EMBEDDING_PROVIDER, IEmbeddingProvider, } from './ai/embedding/embedding-provider.interface';
+import {
+  getInstructions,
+  getIsSkillQuestionPrompt,
+} from './default_prompts/default.prompts';
+import {
+  AI_PROVIDER,
+  IAIProvider,
+  IChatMessage,
+} from './ai/ai-provider.interface';
+import {
+  EMBEDDING_PROVIDER,
+  IEmbeddingProvider,
+} from './ai/embedding/embedding-provider.interface';
 
 @Injectable()
 export class AppService {

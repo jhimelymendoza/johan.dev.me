@@ -31,7 +31,7 @@ export class Project {
   methodology?: string;
 
   @Prop()
-  description:string
+  description: string;
 
   @Prop({ type: [Number], default: [] })
   embeddings: number[];

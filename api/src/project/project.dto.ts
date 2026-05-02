@@ -1,5 +1,5 @@
 export class ProjectDto {
-  id:string;
+  id: string;
   company: string;
   year: string;
   role: string;

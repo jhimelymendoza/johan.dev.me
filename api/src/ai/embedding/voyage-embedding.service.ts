@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IEmbeddingModelInfo, IEmbeddingProvider, } from './embedding-provider.interface';
+import {
+  IEmbeddingModelInfo,
+  IEmbeddingProvider,
+} from './embedding-provider.interface';
 import { VoyageAIClient } from 'voyageai';
 
 const EMBEDDING_MODEL = 'voyage-4-lite';
