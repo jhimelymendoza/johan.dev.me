@@ -2,6 +2,7 @@ import { Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { AiConfigDto } from './ai-config.dto';
+import { EmbeddingConfigDto } from './embedding-config.dto';
 import { IChat } from './dto/chat.interface';
 
 @ApiTags('AI')
@@ -10,10 +11,17 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('ai-config')
-  @ApiOperation({ summary: 'Get AI provider configuration', description: 'Returns the current AI provider, chat model, and embedding model being used.' })
+  @ApiOperation({ summary: 'Get AI provider configuration', description: 'Returns the current AI provider and chat model being used.' })
   @ApiResponse({ status: 200, description: 'AI configuration details' })
   getAiConfig(): AiConfigDto {
     return this.appService.getAiConfig();
+  }
+
+  @Get('embedding-config')
+  @ApiOperation({ summary: 'Get embedding provider configuration', description: 'Returns the current embedding provider and model being used.' })
+  @ApiResponse({ status: 200, description: 'Embedding configuration details' })
+  getEmbeddingConfig(): EmbeddingConfigDto {
+    return this.appService.getEmbeddingConfig();
   }
 
   @Get('ask')

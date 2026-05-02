@@ -4,10 +4,8 @@ import { Ollama } from 'ollama';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
-
-//const CHAT_MODEL = 'qwen3.5:cloud';
-const CHAT_MODEL = 'kimi-k2.5';
-const EMBEDDING_MODEL = 'qwen3-embedding:latest'
+const CHAT_MODEL = 'gpt-oss:120b-cloud';
+//const CHAT_MODEL = 'kimi-k2.5:cloud';
 
 @Injectable()
 export class OllamaService implements IAIProvider {
@@ -15,7 +13,6 @@ export class OllamaService implements IAIProvider {
     private readonly client: Ollama,
     private readonly configService: ConfigService,
   ) {}
-
 
   async chat(
     prompt: string,
@@ -27,7 +24,8 @@ export class OllamaService implements IAIProvider {
       messages: [
         { role: 'system', content: systemInstruction },
         ...history.map((msg) => ({
-          role: msg.role === 'model' ? ('assistant' as const) : ('user' as const),
+          role:
+            msg.role === 'model' ? ('assistant' as const) : ('user' as const),
           content: msg.content,
         })),
         { role: 'user', content: prompt },
@@ -37,19 +35,12 @@ export class OllamaService implements IAIProvider {
     return response.message.content;
   }
 
-  async generateEmbedding(text: string): Promise<number[]> {
-    const response = await this.client.embed({
-      model: EMBEDDING_MODEL,
-      input: text,
-    });
-
-    return response.embeddings[0];
-  }
-
   getModelInfo(): IModelInfo {
     const isCloud = this.configService.get<string>('OLLAMA_CLOUD') === 'true';
-    const providerName = isCloud ? 'Ollama Cloud' : 'Ollama';
-    return { provider: providerName, chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
+    return {
+      provider: isCloud ? 'Ollama Cloud' : 'Ollama',
+      chatModel: CHAT_MODEL,
+    };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {

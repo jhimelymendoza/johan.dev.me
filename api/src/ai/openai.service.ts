@@ -4,7 +4,6 @@ import { getSkillComparisonIntentPrompt } from '../default_prompts/default.promp
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
 const CHAT_MODEL = 'gpt-4o-mini';
-const EMBEDDING_MODEL = 'text-embedding-3-small';
 const TEMPERATURE = 0.5;
 
 @Injectable()
@@ -22,7 +21,8 @@ export class OpenAIService implements IAIProvider {
       messages: [
         { role: 'system', content: systemInstruction },
         ...history.map((msg) => ({
-          role: msg.role === 'model' ? ('assistant' as const) : ('user' as const),
+          role:
+            msg.role === 'model' ? ('assistant' as const) : ('user' as const),
           content: msg.content,
         })),
         { role: 'user', content: prompt },
@@ -32,17 +32,8 @@ export class OpenAIService implements IAIProvider {
     return response.choices[0].message.content ?? 'no tengo respuesta';
   }
 
-  async generateEmbedding(text: string): Promise<number[]> {
-    const response = await this.client.embeddings.create({
-      model: EMBEDDING_MODEL,
-      input: text,
-    });
-
-    return response.data[0].embedding;
-  }
-
   getModelInfo(): IModelInfo {
-    return { provider: 'OpenAI', chatModel: CHAT_MODEL, embeddingModel: EMBEDDING_MODEL };
+    return { provider: 'OpenAI', chatModel: CHAT_MODEL };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {

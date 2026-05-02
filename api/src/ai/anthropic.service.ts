@@ -13,7 +13,7 @@ export class AnthropicService implements IAIProvider {
   // }
 
   getModelInfo(): IModelInfo {
-    return { provider: 'Anthropic', chatModel: 'not implemented', embeddingModel: 'not implemented' };
+    return { provider: 'Anthropic', chatModel: 'not implemented' };
   }
 
   async chat(
@@ -41,15 +41,6 @@ export class AnthropicService implements IAIProvider {
     // });
     // return response.content[0].type === 'text' ? response.content[0].text : 'no tengo respuesta';
     throw new Error('AnthropicService.chat — not implemented yet');
-  }
-
-  async generateEmbedding(_text: string): Promise<number[]> {
-    // TODO: Anthropic does not currently offer a native embeddings API.
-    // Options to consider:
-    //   - Use a third-party embeddings provider (e.g. OpenAI, Cohere, or a local model)
-    //   - Use Voyage AI embeddings (Anthropic's recommended partner): https://www.voyageai.com
-    //   - Keep using GenAI embeddings even when switching chat to Anthropic
-    throw new Error('AnthropicService.generateEmbedding — not implemented yet');
   }
 
   async isSkillComparison(_prompt: string): Promise<boolean> {

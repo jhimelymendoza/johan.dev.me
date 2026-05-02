@@ -1,16 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { AiConfigDto } from './ai-config.dto';
+import { EmbeddingConfigDto } from './embedding-config.dto';
 import { IChat } from './dto/chat.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { Connection, ConnectionStates, Model } from 'mongoose';
 import { Skills } from './project/skills.schema';
 import { ProjectService } from './project/project.service';
 import cosineSimilarity from 'compute-cosine-similarity';
-import {
-  getInstructions,
-  getIsSkillQuestionPrompt,
-} from './default_prompts/default.prompts';
-import { AI_PROVIDER, IAIProvider, IChatMessage } from './ai/ai-provider.interface';
+import { getInstructions, getIsSkillQuestionPrompt, } from './default_prompts/default.prompts';
+import { AI_PROVIDER, IAIProvider, IChatMessage, } from './ai/ai-provider.interface';
+import { EMBEDDING_PROVIDER, IEmbeddingProvider, } from './ai/embedding/embedding-provider.interface';
 
 @Injectable()
 export class AppService {
@@ -18,24 +17,42 @@ export class AppService {
 
   constructor(
     @Inject(AI_PROVIDER) private aiProvider: IAIProvider,
+    @Inject(EMBEDDING_PROVIDER) private embeddingProvider: IEmbeddingProvider,
     @InjectConnection() private connection: Connection,
     private projectService: ProjectService,
     @InjectModel(Skills.name) private skillsModel: Model<Skills>,
   ) {}
 
-  async onModuleInit() {
-    const isConnected = this.connection.readyState === 1;
+  onModuleInit() {
+    const isConnected =
+      this.connection.readyState === ConnectionStates.connected;
     console.log(
       `MongoDB connection started: ${isConnected ? 'Connected' : 'Not Connected'}`,
     );
 
-    const { provider, chatModel, embeddingModel } = this.aiProvider.getModelInfo();
-    console.info(`AI Provider: ${provider} | Chat model: ${chatModel} | Embedding model: ${embeddingModel}`);
+    const { provider, chatModel } = this.aiProvider.getModelInfo();
+    const { provider: embProvider, embeddingModel } =
+      this.embeddingProvider.getEmbeddingModelInfo();
+    console.info(`AI Provider: ${provider} | Chat model: ${chatModel}`);
+    console.info(
+      `Embedding Provider: ${embProvider} | Embedding model: ${embeddingModel}`,
+    );
   }
 
   getAiConfig(): AiConfigDto {
-    const { provider, chatModel, embeddingModel } = this.aiProvider.getModelInfo();
-    return { provider, chatModel, embeddingModel };
+    const { provider, chatModel } = this.aiProvider.getModelInfo();
+    const { provider: embProvider, embeddingModel } = this.getEmbeddingConfig();
+    return {
+      provider,
+      chatModel: `Model : ${chatModel}`,
+      embeddingModel: `Embedding : ${embProvider} - ${embeddingModel}`,
+    };
+  }
+
+  getEmbeddingConfig(): EmbeddingConfigDto {
+    const { provider, embeddingModel } =
+      this.embeddingProvider.getEmbeddingModelInfo();
+    return { provider, embeddingModel };
   }
 
   async ask(question: string): Promise<IChat> {
@@ -78,7 +95,9 @@ export class AppService {
       throw new NotFoundException(`Skill with id "${id}" not found`);
     }
 
-    const embeddings = await this.aiProvider.generateEmbedding(skill.name);
+    const embeddings = await this.embeddingProvider.generateEmbedding(
+      skill.name,
+    );
 
     skill = await this.skillsModel
       .findByIdAndUpdate(id, { embeddings }, { new: true })
@@ -90,12 +109,13 @@ export class AppService {
   async hasAnyOfQuestionSkills(
     text: string,
   ): Promise<{ skill: string; similarity: number }[]> {
-    const questionEmbedding = await this.aiProvider.generateEmbedding(text);
+    const questionEmbedding =
+      await this.embeddingProvider.generateEmbedding(text);
     const skills = await this.skillsModel.find().exec();
 
     const result = skills.map((skill) => ({
       skill: skill.name,
-      similarity: cosineSimilarity(questionEmbedding!, skill.embeddings)!,
+      similarity: cosineSimilarity(questionEmbedding, skill.embeddings)!,
     }));
 
     return result.sort((a, b) => b.similarity - a.similarity);

@@ -4,7 +4,6 @@ import { getSkillComparisonIntentPrompt } from '../default_prompts/default.promp
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
 const MODEL = 'gemini-2.0-flash-001';
-const EMBEDDING_MODEL = 'gemini-embedding-001';
 const TEMPERATURE = 0.5;
 
 @Injectable()
@@ -34,20 +33,8 @@ export class GenAIService implements IAIProvider {
     return response.text ?? 'no tengo respuesta';
   }
 
-  async generateEmbedding(text: string): Promise<number[]> {
-    const response = await this.googleGenAI.models.embedContent({
-      model: EMBEDDING_MODEL,
-      contents: text,
-      config: {
-        outputDimensionality: 768,
-      },
-    });
-
-    return response.embeddings![0].values!;
-  }
-
   getModelInfo(): IModelInfo {
-    return { provider: 'Google GenAI', chatModel: MODEL, embeddingModel: EMBEDDING_MODEL };
+    return { provider: 'Google GenAI', chatModel: MODEL };
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {
