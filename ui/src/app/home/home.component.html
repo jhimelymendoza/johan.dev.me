@@ -6,6 +6,33 @@
       <span class="text">Johandev</span><span class="dot">.</span><span class="text">me</span>
       <img src="assets/right.home.svg" alt="">
     </div>
+    <nav class="header-nav">
+      <a class="header-nav__cv" href="/assets/cv.pdf" download title="Descargar CV">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar CV
+      </a>
+      <div class="header-nav__socials">
+        <a href="https://github.com/johandev" target="_blank" rel="noopener" title="GitHub" class="header-nav__socials__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+          </svg>
+        </a>
+        <a href="https://linkedin.com/in/johandev" target="_blank" rel="noopener" title="LinkedIn" class="header-nav__socials__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </a>
+        <a href="https://instagram.com/johandev" target="_blank" rel="noopener" title="Instagram" class="header-nav__socials__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          </svg>
+        </a>
+      </div>
+    </nav>
   </div>
   <div class="main-layout__content">
     <div class="main-layout__content__ask">
@@ -21,34 +48,60 @@
           <input  (keydown.enter)="ask()" formControlName="chat"  type="text">
 
         </ng-container>
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg (click)="ask()" style="cursor:pointer" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21.6911 20.1453L17.6125 16.0966C19.1957 14.1212 19.9624 11.6137 19.7549 9.08992C19.5475 6.56611 18.3817 4.21775 16.4973 2.52772C14.6128 0.837685 12.153 -0.0655592 9.62348 0.00370867C7.09402 0.0729766 4.6872 1.10949 2.89792 2.90013C1.10865 4.69076 0.0729212 7.0994 0.00370586 9.6308C-0.0655094 12.1622 0.83705 14.6239 2.5258 16.5098C4.21455 18.3957 6.56112 19.5623 9.08302 19.7699C11.6049 19.9775 14.1105 19.2103 16.0844 17.6259L20.13 21.6746C20.2322 21.7777 20.3538 21.8595 20.4878 21.9154C20.6217 21.9712 20.7654 22 20.9106 22C21.0557 22 21.1994 21.9712 21.3333 21.9154C21.4673 21.8595 21.5889 21.7777 21.6911 21.6746C21.8892 21.4694 22 21.1953 22 20.9099C22 20.6246 21.8892 20.3505 21.6911 20.1453ZM9.9171 17.6259C8.39508 17.6259 6.90725 17.1742 5.64175 16.328C4.37624 15.4818 3.3899 14.279 2.80745 12.8718C2.225 11.4646 2.07261 9.91609 2.36953 8.42219C2.66646 6.92829 3.39938 5.55605 4.47561 4.47901C5.55183 3.40197 6.92303 2.66849 8.41579 2.37134C9.90856 2.07418 11.4559 2.22669 12.862 2.80958C14.2682 3.39247 15.47 4.37956 16.3156 5.64603C17.1612 6.9125 17.6125 8.40146 17.6125 9.92463C17.6125 11.9671 16.8018 13.926 15.3586 15.3702C13.9154 16.8145 11.958 17.6259 9.9171 17.6259Z" fill="white"/>
         </svg>
 
       </div>
       <div class="main-layout__content__ask__actions">
-        <div role="button" class="main-layout__content__ask__actions__item">
+        <div [routerLink]="'/coming-soon'" [queryParams]="{title:'Sobre Mí',subtitle:'Pronto podrás conocer más sobre mí'}" role="button" class="main-layout__content__ask__actions__item">
           Sobre mi
         </div>
-        <div role="button" class="main-layout__content__ask__actions__item">
+        <div [routerLink]="'/coming-soon'" [queryParams]="{title:'Mis Habilidades',subtitle:'Pronto verás todas mis habilidades'}" role="button" class="main-layout__content__ask__actions__item">
           Mis habilidades
         </div>
-        <div role="button" class="main-layout__content__ask__actions__item">
+        <div [routerLink]="'/timeline'" role="button" class="main-layout__content__ask__actions__item">
          Mis proyectos
         </div>
       </div>
       <div  class="main-layout__content__ask__contact">
-        <div role="button" class="main-layout__content__ask__contact__item">
-          Sobre mi
+<div [routerLink]="'/coming-soon'" [queryParams]="{title:'Contáctame',subtitle:'Pronto podrás contactarme'}" role="button" class="main-layout__content__ask__contact__item">
+          Contáctame
         </div>
       </div>
       <div class="scrolling-container">
         <img class="scrolling-image" src="assets/skills.home.svg" alt="skills">
       </div>
     </div>
-    <div class="blur-circle"></div>
+    <div class="blur-circle"
+         [style.left.%]="trackMouse() ? mouseX() : 50"
+         [style.top.%]="trackMouse() ? mouseY() : 50">
+    </div>
+
+    <button class="track-toggle" (click)="toggleTracking()" [title]="trackMouse() ? 'Desactivar efecto' : 'Activar efecto'">
+      <span class="track-toggle__dot" [class.active]="trackMouse()"></span>
+    </button>
+
+    <button class="open-terminal" (click)="showTerminal.set(true)" title="Abrir terminal">
+      <span class="open-terminal__dot"></span>
+      Abrir terminal
+    </button>
+
+    @if (!aiLoading()) {
+      <div class="ai-config-tags">
+        <span class="ai-config-tag provider">{{ aiConfig()?.provider }}</span>
+        <span class="ai-config-tag model">{{ aiConfig()?.chatModel }}</span>
+        <span class="ai-config-tag embedding">{{ aiConfig()?.embeddingModel }}</span>
+      </div>
+    }
 
   </div>
+
+  @if (showTerminal()) {
+    <div class="terminal-panel">
+      <jdm-terminal mode="panel" (closePanel)="showTerminal.set(false)" />
+    </div>
+  }
 
 </div>
 </div>

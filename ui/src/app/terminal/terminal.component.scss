@@ -1,0 +1,192 @@
+// ─── Palette (WebStorm / IntelliJ Dark) ─────────────────────────
+$bg:        #1D1D1D;
+$bar-bg:    #13141f;
+$border:    rgba(255, 255, 255, 0.07);
+$text:      #abb2bf;
+$prompt:    #98c379;   // green
+$brand:     #7243ff;   // purple
+$cmd:       #61afef;   // blue
+$hl:        #e5c07b;   // yellow
+$error:     #e06c75;   // red
+$dim:       #5c6370;   // grey
+$tag:       #c678dd;   // purple-pink
+
+// ─── Host (fullscreen mode) ──────────────────────────────────────
+:host.term-host--fullscreen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: $bg;
+}
+
+// ─── Window ──────────────────────────────────────────────────────
+.term {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: $bg;
+  border-radius: 10px;
+  border: 1px solid $border;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 20px 60px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+
+  &--fullscreen {
+    max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  // When embedded as a panel (inside .terminal-panel)
+  :host-context(.terminal-panel) & {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    max-width: 100%;
+  }
+}
+
+// ─── Title bar ───────────────────────────────────────────────────
+.term__bar {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 12px;
+  background: $bar-bg;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+  user-select: none;
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.2px;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+  }
+
+  &__spacer {
+    // mirrors the dots width so title stays centered
+    width: 52px;
+  }
+}
+
+// ─── macOS traffic-light dots ────────────────────────────────────
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.12s ease;
+
+  &__icon {
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    pointer-events: none;
+  }
+
+  &:active { filter: brightness(0.8); }
+
+  &--red    { background: #FF5F57; }
+  &--yellow { background: #FEBC2E; }
+  &--green  { background: #28C840; }
+}
+
+// Show icons when hovering the bar (macOS behaviour)
+.term__bar:hover .dot__icon { opacity: 1; }
+.dot:focus-visible { outline: 2px solid rgba(255,255,255,0.4); }
+
+// ─── Body ────────────────────────────────────────────────────────
+.term__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 18px 4px;
+  cursor: text;
+  min-height: 240px;
+  max-height: 380px;
+  text-align: left;
+
+  .term--fullscreen & {
+    max-height: none;
+  }
+
+  &::-webkit-scrollbar       { width: 5px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+// ─── Output lines ────────────────────────────────────────────────
+.term__line {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: $text;
+  white-space: pre-wrap;
+  word-break: break-all;
+  min-height: 1.65em;
+  text-align: left;
+}
+
+// ─── Input row ───────────────────────────────────────────────────
+.term__input-line {
+  display: flex;
+  align-items: center;
+  padding: 2px 0 10px;
+  text-align: left;
+}
+
+.term__prompt {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: $prompt;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.term__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: $text;
+  font-size: 0.8rem;
+  font-family: inherit;
+  line-height: 1.65;
+  caret-color: $text;
+  min-width: 0;
+
+  &::selection { background: rgba(114, 67, 255, 0.4); }
+}
+
+// ─── Inline text colour helpers ──────────────────────────────────
+:host ::ng-deep {
+  .c-brand  { color: $brand; }
+  .c-prompt { color: $prompt; }
+  .c-input  { color: $text; }
+  .c-cmd    { color: $cmd; font-weight: 600; }
+  .c-hl     { color: $hl; }
+  .c-error  { color: $error; }
+  .c-dim    { color: $dim; }
+  .c-tag    { color: $tag; display: inline-block; min-width: 72px; }
+  .c-pad    { padding-left: 1ch; }
+}

@@ -1,0 +1,206 @@
+@use "../../theme/var.style" as *;
+@use "../../theme/mixin.responsive" as *;
+@use "../../theme/mixin.noise" as *;
+
+.main-layout {
+  color: $textColor;
+
+  &__bg {
+    height: inherit;
+    @include animated-noise;
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    @include mobile { justify-content: center; }
+
+    .logo {
+      font-size: 24px;
+      color: white;
+      padding: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      line-height: 70px;
+      cursor: pointer;
+      svg { width: 18px !important; height: 30px !important; }
+    }
+
+    .dot { color: $primaryColor; }
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.tl {
+  position: relative;
+  z-index: 1;
+
+  &__line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(114, 67, 255, 0.4) 5%,
+      rgba(114, 67, 255, 0.4) 95%,
+      transparent 100%
+    );
+  }
+
+  &__entry {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr;
+    align-items: start;
+    gap: 0 32px;
+    margin-bottom: 62px;
+
+    // Estado inicial
+    .tl__entry__left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .tl__entry__dot {
+      opacity: 0;
+      transform: scale(0.3);
+      transition: opacity 0.4s ease 0.15s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+    }
+    .tl__entry__right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s;
+    }
+
+    &.visible {
+      .tl__entry__left  { opacity: 1; transform: translateX(0); }
+      .tl__entry__dot   { opacity: 1; transform: scale(1); }
+      .tl__entry__right { opacity: 1; transform: translateX(0); }
+    }
+
+    &__left {
+      text-align: right;
+      padding-top: 2px;
+
+      &__company {
+        display: block;
+        font-size: 2rem;
+        font-weight: 300;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+      }
+
+      &__year {
+        display: block;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 4px;
+      }
+    }
+
+    &__dot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      position: relative;
+      cursor: pointer;
+
+      &__core {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: $primaryColor;
+        box-shadow: 0 0 8px rgba(114, 67, 255, 0.8);
+        position: relative;
+        z-index: 1;
+        transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+      }
+
+      &__ring {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid rgba(114, 67, 255, 0.4);
+        animation: pulse-ring 2.5s ease-out infinite;
+        transition: border-color 0.25s ease;
+      }
+
+      // Hover — rosado
+      &:hover {
+        .tl__entry__dot__core {
+          background: #FF4FAD;
+          box-shadow: 0 0 12px rgba(255, 79, 173, 0.9);
+          transform: scale(1.2);
+        }
+        .tl__entry__dot__ring {
+          border-color: rgba(255, 79, 173, 0.6);
+        }
+      }
+
+      // Click — burst
+      &.burst {
+        .tl__entry__dot__ring {
+          animation: pulse-ring-burst 0.6s ease-out forwards;
+          border-color: rgba(255, 79, 173, 0.9);
+          border-width: 2px;
+        }
+      }
+    }
+
+    &__right {
+      padding-top: 4px;
+
+      &__role {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 10px;
+        text-align: start;
+      }
+
+      p {
+        margin: 4px 0;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.5;
+        text-align: left;
+        display: flex;
+        gap: 5px;
+        span:last-child {
+          width: 500px;
+          display: block;
+        }
+      }
+
+      .label {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  80%  { transform: scale(2.2); opacity: 0;   }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+
+@keyframes pulse-ring-burst {
+  0%   { transform: scale(1);   opacity: 1;   }
+  60%  { transform: scale(3.5); opacity: 0.4; }
+  100% { transform: scale(4.5); opacity: 0;   }
+}

@@ -1,0 +1,19 @@
+<div class="coming-soon">
+  <div class="coming-soon__content">
+    <div class="coming-soon__icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <h1>{{ displayTitle() }}</h1>
+    <p>{{ displaySubtitle() }}</p>
+    <a [routerLink]="backUrl()" class="coming-soon__back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Volver al inicio
+    </a>
+  </div>
+</div>

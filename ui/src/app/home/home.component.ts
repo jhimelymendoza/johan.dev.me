@@ -1,24 +1,58 @@
-import {Component, inject} from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, HostListener, inject, OnInit, signal} from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {TerminalComponent} from '../terminal/terminal.component';
+import {AiConfigService} from '../services/ai-config.service';
 
 @Component({
   selector: 'jdm-home',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink,
+    TerminalComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  router=inject(Router)
-  fb=inject(FormBuilder)
-  form: FormGroup=this.fb.group({
-    chat: [''],
-  })
+  router = inject(Router);
+  private route = inject(ActivatedRoute);
+  fb = inject(FormBuilder);
+  aiConfigService = inject(AiConfigService);
+  form: FormGroup = this.fb.group({ chat: [''] });
+
+  mouseX = signal(50);
+  mouseY = signal(50);
+  trackMouse = signal(true);
+  showTerminal = signal(false);
+
+  aiConfig = this.aiConfigService.config;
+  aiLoading = this.aiConfigService.loading;
+
+  ngOnInit(): void {
+    const panel = this.route.snapshot.queryParamMap.get('panel');
+    if (panel === '1') this.showTerminal.set(true);
+    this.aiConfigService.fetchConfig();
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(e: MouseEvent) {
+    if (!this.trackMouse()) return;
+    this.mouseX.set((e.clientX / window.innerWidth) * 100);
+    this.mouseY.set((e.clientY / window.innerHeight) * 100);
+  }
+
+  toggleTracking() {
+    this.trackMouse.set(!this.trackMouse());
+  }
 
   ask() {
-    this.router.navigate(['chat']);
+    const q = this.form.get('chat')?.value?.trim();
+    if (q) {
+      this.router.navigate(['chat'], { queryParams: { q } });
+    } else {
+      this.router.navigate(['chat']);
+    }
   }
 }

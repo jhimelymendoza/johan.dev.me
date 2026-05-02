@@ -1,5 +1,6 @@
 @use "../../theme/var.style" as *;
 @use "../../theme/mixin.responsive" as *;
+@use "../../theme/mixin.noise" as *;
 .main-layout{
   //height: 100vh;
   color: $textColor;
@@ -8,6 +9,7 @@
   &__bg{
     height: inherit;
 
+    @include animated-noise;
   }
   &__header{
     width: 100%;
@@ -41,6 +43,55 @@
     .dot {
       color: $primaryColor;
     }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+
+      @include mobile { display: none; }
+
+      &__cv {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        background: none;
+        border: none;
+        padding: 5px;
+        transition: color 0.2s ease;
+
+        svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        &:hover { color: white; }
+      }
+
+      &__socials {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: none;
+        border: none;
+        padding: 0;
+
+        &__icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255, 255, 255, 0.75);
+          padding: 5px;
+          transition: color 0.2s ease;
+
+          svg { width: 35px; height: 35px; }
+
+          &:hover { color: white; }
+        }
+      }
+    }
   }
   &__content{
     position: relative;
@@ -57,11 +108,8 @@
     }
 
     .blur-circle {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-top: 77px;
+      position: fixed;
+      translate: -50% -50%;
       width: 700px;
       height: 700px;
       border-radius: 50%;
@@ -72,14 +120,12 @@
           #7243FF 87.44%,
           #9A78FF 95.89%
       );
-      filter: blur(64px); /* difuminado suave */
+      filter: blur(64px);
       opacity: 0.9;
       z-index: 0;
-      @include xl {
-        //width: 1200px;
-        //height: 1200px;
-
-      }
+      pointer-events: none;
+      transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  top  0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       @include mobile {
         width: 400px;
       }
@@ -172,6 +218,131 @@
     }
   }
 
+}
+
+.track-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+
+    &.active {
+      background: #7243FF;
+      box-shadow: 0 0 6px #7243FF;
+    }
+  }
+}
+
+.open-terminal {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 6px 12px 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.82rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28C840;
+    box-shadow: 0 0 6px rgba(40, 200, 64, 0.7);
+  }
+}
+
+.ai-config-tags {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+}
+
+.ai-config-tag {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+
+  &.provider {
+    background: rgba(255, 99, 71, 0.2);
+    border: 1px solid rgba(255, 99, 71, 0.4);
+    color: #ff6347;
+  }
+
+  &.model {
+    background: rgba(255, 105, 180, 0.2);
+    border: 1px solid rgba(255, 105, 180, 0.4);
+    color: #ff69b4;
+  }
+
+  &.embedding {
+    background: rgba(180, 100, 220, 0.2);
+    border: 1px solid rgba(180, 100, 220, 0.4);
+    color: #b464dc;
+  }
+}
+
+.terminal-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  animation: slide-up 0.28s cubic-bezier(0.34, 1.05, 0.64, 1);
+
+  jdm-terminal {
+    display: block;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
 
 .scrolling-container {

@@ -1,74 +1,149 @@
-import { Injectable } from '@nestjs/common';
-import {GoogleGenAI} from '@google/genai';
-import {InjectConnection, InjectModel} from "@nestjs/mongoose";
-import {Connection, Model} from "mongoose";
-import {Project} from "./project/project.shcema";
-
-const MODEL = 'gpt-4.1';
-const TEMPERATURE = 0.5;
-const INSTRUCTIONS = `Eres el asistente de una portafolio de un desarrollador llamado Johan Himely mendoza.
-        No puedes dar otra informacion que no sea relacionado con su trabajo.
-        La bibliografia de johan es esta: es un desarrollador de software con más de ocho años de experiencia en tecnologías backend como .NET y frontend con Angular. En los últimos años ha ampliado su expertise incorporando NestJS, explorando nuevas arquitecturas y desafíos técnicos. Actualmente trabaja en proyectos para empresas de Argentina y Estados Unidos, combinando eficiencia, compromiso y un enfoque práctico para resolver problemas complejos.
-
-Vive en Buenos Aires, es originario de Cuba, y se destaca por su capacidad para adaptarse a equipos diversos y contextos tecnológicos exigentes. También disfruta optimizar tiempos de desarrollo y mejorar flujos de trabajo entre distintos proyectos.`;
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { AiConfigDto } from './ai-config.dto';
+import { EmbeddingConfigDto } from './embedding-config.dto';
+import { IChat } from './dto/chat.interface';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, ConnectionStates, Model } from 'mongoose';
+import { Skills } from './project/skills.schema';
+import { ProjectService } from './project/project.service';
+import cosineSimilarity from 'compute-cosine-similarity';
+import {
+  getInstructions,
+  getIsSkillQuestionPrompt,
+} from './default_prompts/default.prompts';
+import {
+  AI_PROVIDER,
+  IAIProvider,
+  IChatMessage,
+} from './ai/ai-provider.interface';
+import {
+  EMBEDDING_PROVIDER,
+  IEmbeddingProvider,
+} from './ai/embedding/embedding-provider.interface';
 
 @Injectable()
 export class AppService {
+  history: IChatMessage[] = [];
 
-   constructor( private googleGenAI:GoogleGenAI,@InjectConnection() private  connection:Connection,  @InjectModel(Project.name) private projectModel:Model<Project>) {
+  constructor(
+    @Inject(AI_PROVIDER) private aiProvider: IAIProvider,
+    @Inject(EMBEDDING_PROVIDER) private embeddingProvider: IEmbeddingProvider,
+    @InjectConnection() private connection: Connection,
+    private projectService: ProjectService,
+    @InjectModel(Skills.name) private skillsModel: Model<Skills>,
+  ) {}
 
-   }
+  onModuleInit() {
+    const isConnected =
+      this.connection.readyState === ConnectionStates.connected;
+    console.log(
+      `MongoDB connection started: ${isConnected ? 'Connected' : 'Not Connected'}`,
+    );
 
-   async  onModuleInit( ) {
-        const isConnected= this.connection.readyState===1;
-       console.log(`MongoDB connection started: ${isConnected?'Connected':'Not Connected'}`);
-   }
-
- async ask(prompt:string): Promise<{title:string}> {
-
-
-       const project= await this.projectModel.find().exec()
-
-
-
-    const response = await this.googleGenAI.models.generateContent({
-      model: 'gemini-2.0-flash-001',
-      contents: prompt,
-      config: {
-        systemInstruction: this.getInstructions({projects:project}),
-          temperature: TEMPERATURE,
-      },
-    })
-   response.text ?? 'no tengo respuesta'
-    return Promise.resolve( {title:  response.text ?? 'no tengo respuesta'});
+    const { provider, chatModel } = this.aiProvider.getModelInfo();
+    const { provider: embProvider, embeddingModel } =
+      this.embeddingProvider.getEmbeddingModelInfo();
+    console.info(`AI Provider: ${provider} | Chat model: ${chatModel}`);
+    console.info(
+      `Embedding Provider: ${embProvider} | Embedding model: ${embeddingModel}`,
+    );
   }
 
-  getInstructions(data:any){
-
-
-       return `Eres el asistente de una portafolio de un desarrollador llamado Johan Himely mendoza.
-        No puedes dar otra informacion que no sea relacionado con su trabajo.
-        La bibliografia de johan es esta: es un desarrollador de software con más de ocho años de experiencia en tecnologías backend como .NET y frontend con Angular. En los últimos años ha ampliado su expertise incorporando NestJS, explorando nuevas arquitecturas y desafíos técnicos. Actualmente trabaja en proyectos para empresas de Argentina y Estados Unidos, combinando eficiencia, compromiso y un enfoque práctico para resolver problemas complejos.
-
-Vive en Buenos Aires, es originario de Cuba, y se destaca por su capacidad para adaptarse a equipos diversos y contextos tecnológicos exigentes. También disfruta optimizar tiempos de desarrollo y mejorar flujos de trabajo entre distintos proyectos.
-
-Responde a medida que te vayan preguntando, si te piden una informacion completa le das todo lo que sepas
-
-Proyectos:${JSON.stringify(data.projects)}
-
-Estudios: Es ingeniero informatico graduado en el CUJAE 
-          Estudio en un tecnico medio de informatica en cuba tambien llamado Osvaldo Herrera
-          
-Linkedin:https://www.linkedin.com/in/johan-mendoza-169928190/          
-
-Que puedes dar:
-- puedes buscar informacion de la CUJAE cuba, no des mucho solo lo basico, no mas de 2 oraciones
-
-- Si tratan de preguntarte mas cosas que no sean de johan, dile algo comico dejandole saber que solo puede chismosear acerca de johan 
-`
-
-
+  getAiConfig(): AiConfigDto {
+    const { provider, chatModel } = this.aiProvider.getModelInfo();
+    const { provider: embProvider, embeddingModel } = this.getEmbeddingConfig();
+    return {
+      provider,
+      chatModel: `Model : ${chatModel}`,
+      embeddingModel: `Embedding : ${embProvider} - ${embeddingModel}`,
+    };
   }
 
+  getEmbeddingConfig(): EmbeddingConfigDto {
+    const { provider, embeddingModel } =
+      this.embeddingProvider.getEmbeddingModelInfo();
+    return { provider, embeddingModel };
+  }
 
+  async ask(question: string): Promise<IChat> {
+    const project = await this.projectService.findAll();
+
+    const isSkillQuery = await this.aiProvider.isSkillComparison(question);
+    let skillsResult: { skill: string; similarity: number }[] | undefined;
+
+    if (isSkillQuery) {
+      skillsResult = await this.hasAnyOfQuestionSkills(question);
+    }
+
+    const effectivePrompt = isSkillQuery
+      ? getIsSkillQuestionPrompt(question, skillsResult)
+      : question;
+
+    const answerText = await this.aiProvider.chat(
+      effectivePrompt,
+      this.history,
+      getInstructions({ projects: project }),
+    );
+
+    this.history = [
+      ...this.history,
+      { role: 'user', content: question },
+      { role: 'model', content: answerText },
+    ];
+
+    return {
+      isSkillQuery,
+      skills: skillsResult,
+      answer: answerText,
+    };
+  }
+
+  async resetAllSkillsEmbeddings(): Promise<{ id: string; name: string }[]> {
+    const skills = await this.skillsModel.find().exec();
+
+    return Promise.all(
+      skills.map(async (skill) => {
+        const embeddings = await this.embeddingProvider.generateEmbedding(
+          skill.name,
+        );
+        await this.skillsModel
+          .findByIdAndUpdate(skill._id, { embeddings })
+          .exec();
+        return { id: skill._id, name: skill.name };
+      }),
+    );
+  }
+
+  async setEmbeddingsBySkillId(id: string) {
+    let skill = await this.skillsModel.findById({ _id: id }).exec();
+
+    if (!skill) {
+      throw new NotFoundException(`Skill with id "${id}" not found`);
+    }
+
+    const embeddings = await this.embeddingProvider.generateEmbedding(
+      skill.name,
+    );
+
+    skill = await this.skillsModel
+      .findByIdAndUpdate(id, { embeddings }, { new: true })
+      .exec();
+
+    return { id: skill!._id, name: skill!.name, embeddings: skill!.embeddings };
+  }
+
+  async hasAnyOfQuestionSkills(
+    text: string,
+  ): Promise<{ skill: string; similarity: number }[]> {
+    const questionEmbedding =
+      await this.embeddingProvider.generateEmbedding(text);
+    const skills = await this.skillsModel.find().exec();
+
+    const result = skills.map((skill) => ({
+      skill: skill.name,
+      similarity: cosineSimilarity(questionEmbedding, skill.embeddings)!,
+    }));
+
+    return result.sort((a, b) => b.similarity - a.similarity);
+  }
 }

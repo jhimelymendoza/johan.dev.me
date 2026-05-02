@@ -1,0 +1,55 @@
+<div class="term" [class.term--fullscreen]="mode === 'fullscreen'">
+
+  <!-- ─── Title bar ─────────────────────────────────────────────── -->
+  <div class="term__bar">
+    <div class="term__bar__dots">
+
+      <button class="dot dot--red" (click)="onRed()" title="Cerrar">
+        <svg class="dot__icon" viewBox="0 0 10 10" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="1.5" stroke-linecap="round">
+          <line x1="2.5" y1="2.5" x2="7.5" y2="7.5"/>
+          <line x1="7.5" y1="2.5" x2="2.5" y2="7.5"/>
+        </svg>
+      </button>
+
+      <button class="dot dot--yellow" (click)="onYellow()" title="Pantalla completa">
+        <svg class="dot__icon" viewBox="0 0 10 10" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="1.5" stroke-linecap="round">
+          <line x1="2" y1="5" x2="8" y2="5"/>
+        </svg>
+      </button>
+
+      <button class="dot dot--green" (click)="onGreen()" title="Modo panel">
+        <svg class="dot__icon" viewBox="0 0 10 10" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="2,6 5,3 8,6"/>
+          <polyline points="2,8 5,5 8,8"/>
+        </svg>
+      </button>
+
+    </div>
+    <span class="term__bar__title">johandev.me — terminal</span>
+    <div class="term__bar__spacer"></div>
+  </div>
+
+  <div class="term__body" #termBody (click)="onBodyClick()">
+
+    @for (line of lines; track $index) {
+      <div class="term__line" [innerHTML]="line.html"></div>
+    }
+
+    <div class="term__input-line">
+      <span class="term__prompt">johandev:~$&nbsp;</span>
+      <input
+        #termInput
+        class="term__input"
+        type="text"
+        [(ngModel)]="currentInput"
+        (keydown)="onKeydown($event)"
+        autocomplete="off"
+        spellcheck="false"
+        autocorrect="off"
+        autocapitalize="off"
+      />
+    </div>
+
+  </div>
+
+</div>
