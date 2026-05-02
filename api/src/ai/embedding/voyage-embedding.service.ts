@@ -5,7 +5,7 @@ import {
 } from './embedding-provider.interface';
 import { VoyageAIClient } from 'voyageai';
 
-const EMBEDDING_MODEL = 'voyage-4-lite';
+const EMBEDDING_MODEL = process.env.VOYAGE_EMBEDDING_MODEL!;
 
 @Injectable()
 export class VoyageEmbeddingService implements IEmbeddingProvider {

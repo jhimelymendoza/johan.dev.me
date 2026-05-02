@@ -98,7 +98,23 @@ export class AppService {
     };
   }
 
-  async setEmbeddingsByProjectId(id: string) {
+  async resetAllSkillsEmbeddings(): Promise<{ id: string; name: string }[]> {
+    const skills = await this.skillsModel.find().exec();
+
+    return Promise.all(
+      skills.map(async (skill) => {
+        const embeddings = await this.embeddingProvider.generateEmbedding(
+          skill.name,
+        );
+        await this.skillsModel
+          .findByIdAndUpdate(skill._id, { embeddings })
+          .exec();
+        return { id: skill._id, name: skill.name };
+      }),
+    );
+  }
+
+  async setEmbeddingsBySkillId(id: string) {
     let skill = await this.skillsModel.findById({ _id: id }).exec();
 
     if (!skill) {

@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
-const CHAT_MODEL = 'gpt-4o-mini';
+const CHAT_MODEL = process.env.OPENAI_CHAT_MODEL!;
 const TEMPERATURE = 0.5;
 
 @Injectable()

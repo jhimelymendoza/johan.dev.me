@@ -1,11 +1,5 @@
 import { Controller, Get, Param, Put, Query } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags, } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { AiConfigDto } from './ai-config.dto';
 import { EmbeddingConfigDto } from './embedding-config.dto';
@@ -71,7 +65,17 @@ export class AppController {
   })
   @ApiResponse({ status: 404, description: 'Skill not found' })
   setEmbedding(@Param('id') id: string) {
-    return this.appService.setEmbeddingsByProjectId(id);
+    return this.appService.setEmbeddingsBySkillId(id);
+  }
+
+  @Put('reset-embedding-to-skills')
+  @ApiResponse({
+    status: 200,
+    description: 'Skill updated with new embeddings',
+  })
+  @ApiResponse({ status: 500, description: 'Unexpected error occurred.' })
+  resetSkillsEmbedding() {
+    return this.appService.resetAllSkillsEmbeddings();
   }
 
   @Get('compare')

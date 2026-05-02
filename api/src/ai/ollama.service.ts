@@ -4,15 +4,21 @@ import { Ollama } from 'ollama';
 import { getSkillComparisonIntentPrompt } from '../default_prompts/default.prompts';
 import { IAIProvider, IChatMessage, IModelInfo } from './ai-provider.interface';
 
-const CHAT_MODEL = 'gpt-oss:120b-cloud';
-//const CHAT_MODEL = 'kimi-k2.5:cloud';
-
 @Injectable()
 export class OllamaService implements IAIProvider {
+  private readonly modelInfo: IModelInfo;
+  private readonly isCloud: boolean;
+
   constructor(
     private readonly client: Ollama,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.isCloud = this.configService.get<string>('OLLAMA_CLOUD') === 'true';
+    this.modelInfo = {
+      provider: this.isCloud ? 'Ollama Cloud' : 'Ollama',
+      chatModel: this.configService.get<string>('OLLAMA_CHAT_MODEL')!,
+    };
+  }
 
   async chat(
     prompt: string,
@@ -20,7 +26,7 @@ export class OllamaService implements IAIProvider {
     systemInstruction: string,
   ): Promise<string> {
     const response = await this.client.chat({
-      model: CHAT_MODEL,
+      model: this.modelInfo.chatModel,
       messages: [
         { role: 'system', content: systemInstruction },
         ...history.map((msg) => ({
@@ -35,17 +41,13 @@ export class OllamaService implements IAIProvider {
     return response.message.content;
   }
 
-  getModelInfo(): IModelInfo {
-    const isCloud = this.configService.get<string>('OLLAMA_CLOUD') === 'true';
-    return {
-      provider: isCloud ? 'Ollama Cloud' : 'Ollama',
-      chatModel: CHAT_MODEL,
-    };
+  getModelInfo() {
+    return this.modelInfo;
   }
 
   async isSkillComparison(prompt: string): Promise<boolean> {
     const response = await this.client.chat({
-      model: CHAT_MODEL,
+      model: this.modelInfo.chatModel,
       options: { temperature: 0 },
       messages: [
         { role: 'system', content: getSkillComparisonIntentPrompt(prompt) },

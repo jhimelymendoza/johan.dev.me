@@ -5,7 +5,7 @@ import {
   IEmbeddingProvider,
 } from './embedding-provider.interface';
 
-const EMBEDDING_MODEL = 'text-embedding-3-small';
+const EMBEDDING_MODEL = process.env.OPENAI_EMBEDDING_MODEL!;
 
 @Injectable()
 export class OpenAIEmbeddingService implements IEmbeddingProvider {

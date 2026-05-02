@@ -25,24 +25,41 @@ export const EMBEDDING_SERVICES = [
   },
   {
     provide: OllamaEmbeddingService,
-    useFactory: (client: Ollama, cs: ConfigService) =>
-      new OllamaEmbeddingService(client, cs),
-    inject: [Ollama, ConfigService],
+    useFactory: (cs: ConfigService) => {
+      const localHost = cs.get<string>('OLLAMA_LOCAL_HOST');
+      if (!localHost) {
+        throw new InternalServerErrorException(
+          'OLLAMA_LOCAL_HOST should be setting',
+        );
+      }
+      return new OllamaEmbeddingService(
+        new Ollama({
+          host: localHost,
+        }),
+        cs,
+      );
+    },
+    inject: [ConfigService],
   },
   {
-    provide: VoyageEmbeddingService,
+    provide: VoyageAIClient,
+    inject: [ConfigService],
     useFactory: (cs: ConfigService) => {
       const key = cs.get<string>('VOYAGE_API_KEY');
       if (!key) {
         throw new InternalServerErrorException('VOYAGE_API_KEY must be set');
       }
-      const voyageAiClient = new VoyageAIClient({
+      return new VoyageAIClient({
         apiKey: cs.get<string>('VOYAGE_API_KEY'),
       });
-
-      new VoyageEmbeddingService(voyageAiClient);
     },
-    inject: [ConfigService],
+  },
+  {
+    provide: VoyageEmbeddingService,
+    inject: [VoyageAIClient],
+    useFactory: (voyageAIClient: VoyageAIClient) => {
+      return new VoyageEmbeddingService(voyageAIClient);
+    },
   },
   MongoAtlasEmbeddingService,
   // ── Active embedding provider — change useClass to switch ────────────────
@@ -50,7 +67,7 @@ export const EMBEDDING_SERVICES = [
   //          VoyageEmbeddingService | MongoAtlasEmbeddingService
   {
     provide: EMBEDDING_PROVIDER,
-    useClass: OllamaEmbeddingService,
+    useClass: VoyageEmbeddingService,
   },
 ];
 
