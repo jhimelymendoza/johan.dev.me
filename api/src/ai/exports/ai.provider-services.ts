@@ -7,6 +7,7 @@ import { GenAIService } from '../genai.service';
 import OpenAI from 'openai';
 import { OpenAIService } from '../openai.service';
 import { AI_PROVIDER } from '../ai-provider.interface';
+import { LangchainAgentService } from '../agent';
 
 function getOllamaInstance(
   configService: ConfigService<Record<string | symbol, unknown>, false>,
@@ -85,7 +86,7 @@ const AI_SERVICES = [
   // set your AI Provider
   {
     provide: AI_PROVIDER,
-    useClass: OllamaService,
+    useClass: LangchainAgentService,
   },
 ];
 
