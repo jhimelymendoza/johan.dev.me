@@ -15,7 +15,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:4200', 'https://tudominio.com'],
+    origin: ['http://localhost:4200', 'https://johan-dev-me.onrender.com/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
