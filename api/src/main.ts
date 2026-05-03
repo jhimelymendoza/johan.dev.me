@@ -15,7 +15,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:4200', 'https://johan-dev-me.onrender.com/'],
+    origin: ['http://localhost:4200', 'https://johan-dev-me.vercel.app//'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
