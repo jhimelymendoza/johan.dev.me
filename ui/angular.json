@@ -44,7 +44,7 @@
           },
           "configurations": {
             "production": {
-              "ssr": false,
+              "ssr": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
