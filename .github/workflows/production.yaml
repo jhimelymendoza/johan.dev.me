@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install Vercel CLI
-        run: npm install --global vercel
+        run: npm install --legacy-peer-deps --global vercel
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -31,8 +31,21 @@ jobs:
     runs-on: ubuntu-latest
     env: # <-- Make them available globally
       NODE_ENV: production
-      GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
       MONGO_DB: ${{ secrets.MONGO_DB }}
+      GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_CHAT_MODEL: ${{ secrets.OPENAI_CHAT_MODEL }}
+      OPENAI_EMBEDDING_MODEL: ${{ secrets.OPENAI_EMBEDDING_MODEL }}
+      OLLAMA_CLOUD: ${{ secrets.OLLAMA_CLOUD }}
+      OLLAMA_HOST: ${{ secrets.OLLAMA_HOST }}
+      OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+      OLLAMA_LOCAL_HOST: ${{ secrets.OLLAMA_LOCAL_HOST }}
+      OLLAMA_CHAT_MODEL: ${{ secrets.OLLAMA_CHAT_MODEL }}
+      OLLAMA_EMBEDDING_MODEL: ${{ secrets.OLLAMA_EMBEDDING_MODEL }}
+      VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+      VOYAGE_EMBEDDING_MODEL: ${{ secrets.VOYAGE_EMBEDDING_MODEL }}
+      EMBEDDING_MODEL: ${{ secrets.EMBEDDING_MODEL }}
+      PORT: ${{ secrets.PORT }}
     steps:
       - name: Trigger Render Deploy Hook
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
