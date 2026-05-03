@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {inject, Injectable, signal} from '@angular/core';
 import {catchError, of} from 'rxjs';
-import { environment } from '../../../environments/environment';
+import {environment} from '../../environments/environment';
 
 export interface AiConfig {
   provider: string;
