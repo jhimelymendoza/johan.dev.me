@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import {inject, Injectable, signal} from '@angular/core';
 import {catchError, of} from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface AiConfig {
   provider: string;
@@ -18,7 +19,7 @@ export class AiConfigService {
 
   fetchConfig() {
     this.loading.set(true);
-    this.httpClient.get<AiConfig>('http://localhost:3000/ai-config').pipe(
+    this.httpClient.get<AiConfig>(`${environment.apiUrl}/ai-config`).pipe(
       catchError(err => {
         this.error.set('Error al cargar configuración');
         this.loading.set(false);
